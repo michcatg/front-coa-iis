@@ -1,0 +1,38 @@
+services:
+  coa-iis:
+    container_name: ${CONTAINER_NAME}
+    image: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
+    working_dir: /var/www/coa-iis
+    volumes:
+      # host:container
+      # COMMENT FOR BUILD
+      - ${CODE_FILES}:/var/www/coa-iis:rw
+    # Dev command
+    #command: npm run dev
+    # Build commmand
+    command: [tail, -f, /dev/null]
+    environment:
+      - DEPLOY_PORT=${DEPLOY_PORT}
+      - DEPLOY_DOMAIN=${DEPLOY_DOMAIN}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${NETWORK}"
+      - "traefik.http.routers.${CONTAINER_NAME}-http.entrypoints=web"
+      - "traefik.http.routers.${CONTAINER_NAME}-http.rule=Host(`${DEPLOY_DOMAIN}`)"
+
+      # Configuración HTTPS
+      - "traefik.http.routers.${CONTAINER_NAME}-http.middlewares=redirect-to-https"
+      # Definir router para HTTPS
+      - "traefik.http.routers.${CONTAINER_NAME}-https.rule=Host(`${DEPLOY_DOMAIN}`)"
+      - "traefik.http.routers.${CONTAINER_NAME}-https.entrypoints=websecure"
+      - "traefik.http.routers.${CONTAINER_NAME}-https.tls=true"
+      - "traefik.http.routers.${CONTAINER_NAME}-https.service=aglaonema-services"
+
+      # Middleware para redirección HTTP -> HTTPS
+      - "traefik.http.middlewares.redirect-to-https.redirectScheme.scheme=https"
+    expose:
+      - "${DEPLOY_PORT}"
+networks:
+  proxy:
+    external: true
+    
