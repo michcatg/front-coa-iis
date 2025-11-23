@@ -1,0 +1,20 @@
+// Import and/or override Bulma variables at modules level
+@forward '@fortawesome/fontawesome-svg-core/styles.css';
+@use "bulma/sass/utilities" with(
+  $family-primary: 'sans-serif',
+  //$link: vars.$link,
+);
+@forward "bulma/sass/base";
+
+/*Import layouts*/
+@forward "bulma/sass/layout";
+
+// For helpers
+@forward "bulma/sass/helpers/typography";
+@forward "bulma/sass/helpers/spacing";
+@forward "bulma/sass/helpers/visibility";
+
+// Import the themes so that all CSS variables have a value
+@forward "bulma/sass/themes";
+
+@import "bulma/sass/elements/content";
