@@ -8,30 +8,36 @@ services:
       # COMMENT FOR BUILD
       - ${CODE_FILES}:/var/www/coa-iis:rw
     # Dev command
-    #command: npm run dev
+    command: npm run dev
     # Build commmand
-    command: [tail, -f, /dev/null]
+    #command: [tail, -f, /dev/null]
     environment:
       - DEPLOY_PORT=${DEPLOY_PORT}
       - DEPLOY_DOMAIN=${DEPLOY_DOMAIN}
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=${NETWORK}"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.services.${CONTAINER_NAME}.loadbalancer.server.port=${DEPLOY_PORT}"
+
+      # HTTP Router - redirige a HTTPS
       - "traefik.http.routers.${CONTAINER_NAME}-http.entrypoints=web"
       - "traefik.http.routers.${CONTAINER_NAME}-http.rule=Host(`${DEPLOY_DOMAIN}`)"
-
-      # Configuración HTTPS
       - "traefik.http.routers.${CONTAINER_NAME}-http.middlewares=redirect-to-https"
-      # Definir router para HTTPS
+
+      # HTTPS Router
       - "traefik.http.routers.${CONTAINER_NAME}-https.rule=Host(`${DEPLOY_DOMAIN}`)"
       - "traefik.http.routers.${CONTAINER_NAME}-https.entrypoints=websecure"
       - "traefik.http.routers.${CONTAINER_NAME}-https.tls=true"
-      - "traefik.http.routers.${CONTAINER_NAME}-https.service=aglaonema-services"
+      - "traefik.http.routers.${CONTAINER_NAME}-https.tls.certresolver=letsencrypt"
+      # TODO: Fix certificate issue
 
       # Middleware para redirección HTTP -> HTTPS
-      - "traefik.http.middlewares.redirect-to-https.redirectScheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
     expose:
       - "${DEPLOY_PORT}"
+    networks:
+      - proxy
 networks:
   proxy:
     external: true
