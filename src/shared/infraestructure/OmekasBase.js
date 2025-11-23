@@ -1,7 +1,6 @@
 
+/* TODO: Borrar porque se reemplaza con api/OomekasService */
 import {get} from './apiBase.js';
-// TODO: Cargar desde env
-// TODO: Arreglar cors
 const baseUrl = 'https://test-omekas.aglaonema.mx/api';
 
 const omekasBase = {

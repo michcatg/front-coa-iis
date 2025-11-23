@@ -1,3 +1,4 @@
+/* TODO: Borrar porque se reemplaza con api/httpCLient */
 const fetchData = async (backendUrl,endpoint, method='GET', options = {}, params) => {
   const url = `${backendUrl}/${endpoint}${params}`;
   try{

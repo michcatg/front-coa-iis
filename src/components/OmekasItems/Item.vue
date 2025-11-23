@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: Evaluar si continuar con esta organización -->
     Este es el contenido recuperado del item:
     <br>
     Item Id: {{ itemId }}
