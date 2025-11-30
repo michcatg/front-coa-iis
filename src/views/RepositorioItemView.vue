@@ -4,37 +4,39 @@
     <h2 class="subtitle">Items</h2>
     <div v-if="isLoading">Cargando...</div>
     <div v-else-if="isError">Error al cargar los items.</div>
-    <template v-else>
-      <hr>
-      items:
-      <pre>
-        {{ items }}
-      </pre>
-      <hr>
-      authors for item source /items/3:
-      <pre>
-        {{ authorsArray }}
-      </pre>
-    </template>
+    <media
+      v-else
+      v-for="item in itemsWithAuthors"
+      :key="item.id"
+      :image-source="item.thumbnailSource"
+    >
+      <strong>{{ item.title }}</strong> <small>{{ item.createdAt }}</small>
+      <moreLowText
+        :text="item.description"
+      />
+      <strong>Autores:</strong>
+      <div>
+        <template v-if="item.useAuthors.isLoading">Cargando autores...</template>
+        <template v-else-if="item.useAuthors.isError">Error al cargar autores.</template>
+        <template v-else>
+          <ul>
+            <li v-for="author in item.useAuthors.authors" :key="author.id">
+              {{ author.gradoAcademico }} {{ author.name }} {{ author.apellidos }}
+              <a class="has-text-link" @click="console.log(author)">
+                <font-awesome-icon :icon="faFile" /> Ver Semblanza
+              </a>
+            </li>
+          </ul>
+        </template>
+      </div>
+    </media>
   </main>
 </template>
 <script setup>
-  import { ref } from 'vue'
-  // OmekaS items
-  import { useSimpleItems } from '@/composables/useSimpleItems.js'
-  const { isLoading, isError, items, fetchItems } = useSimpleItems()
-  fetchItems()
-
-  // Strapi authors with items sources (linked OmekaS)
-  import { getAuthorsForItemSource } from '@/api/strapiService.js'
-  const authorsArray = ref([])
-  async function fetchAuthors() {
-    try {
-      const response = await getAuthorsForItemSource('/items/3')
-      authorsArray.value = response.data?.data?.[0]?.autores
-    } catch (error) {
-      console.error('Error fetching authors:', error)
-    }
-  }
-  fetchAuthors()
+  import media from '@/components/layoutComponents/media.vue'
+  import moreLowText from '@/components/basicFormats/moreLowText.vue'
+  import { useSimpleItemsWithAuthors } from '@/composables/useSimpleItemsWithAuthors'
+  import { faFile } from '@fortawesome/free-solid-svg-icons'
+  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors } = useSimpleItemsWithAuthors()
+  fetchItemsWithAuthors()
 </script>
