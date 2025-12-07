@@ -22,7 +22,7 @@
           <ul>
             <li v-for="author in item.useAuthors.authors" :key="author.id">
               {{ author.gradoAcademico }} {{ author.name }} {{ author.apellidos }}
-              <a class="has-text-link" @click="console.log(author)">
+              <a class="has-text-link" @click="processSemblanzaAuthor(author)">
                 <font-awesome-icon :icon="faFile" /> Ver Semblanza
               </a>
             </li>
@@ -36,7 +36,16 @@
   import media from '@/components/layoutComponents/media.vue'
   import moreLowText from '@/components/basicFormats/moreLowText.vue'
   import { useSimpleItemsWithAuthors } from '@/composables/useSimpleItemsWithAuthors'
+   import { useSemblanzaAuthor } from '@/composables/useSemblanzaAuthors'
   import { faFile } from '@fortawesome/free-solid-svg-icons'
   const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors } = useSimpleItemsWithAuthors()
   fetchItemsWithAuthors()
+
+  async function processSemblanzaAuthor(author){
+    if (!author.useSemblanza) {
+      author.useSemblanza = useSemblanzaAuthor(author.id);
+      await author.useSemblanza.fetchSemblanzaAuthor();
+    }
+    console.log(author.useSemblanza.semblanzaAuthor);
+  }
 </script>

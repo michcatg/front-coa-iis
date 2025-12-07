@@ -1,5 +1,5 @@
 import { ref, shallowRef } from "vue";
-import { getRecentOmekaItems as getItemsApi } from '@/api/omekasService.js'
+import { getRecentOmekasItems as getItemsApi } from '@/api/omekasService.js'
 import { formatSimpleItem } from "@/utils/format/simpleItemFormat";
 
 export function useSimpleItems() {

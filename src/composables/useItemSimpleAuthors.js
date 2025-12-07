@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { getAuthorsForItemSource } from '@/api/strapiService.js'
 import { getOmekaBase as itemSourceURL } from '@/api/omekasService.js'
-import { formatSimpleAuthors } from "@/utils/format/simpleAutorFormat";
+import { formatSimpleAuthor } from "@/utils/format/autorFormat";
 
 export function useItemSimpleAuthors(item) {
   const isLoading = ref(false)
@@ -14,7 +14,7 @@ export function useItemSimpleAuthors(item) {
 
     try {
       const response = await getAuthorsForItemSource(item.source.replace(itemSourceURL(), ''))
-      const authorsArray = response.data?.data?.[0]?.autores.map(formatSimpleAuthors) || []
+      const authorsArray = response.data?.data?.[0]?.autores.map(formatSimpleAuthor) || []
       authors.value = authorsArray
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
