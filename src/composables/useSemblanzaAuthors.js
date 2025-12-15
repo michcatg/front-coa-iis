@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { getSemblanzaAuthor } from '@/api/strapiService.js'
+import { formatSemblanzaAuthor } from '@/utils/format/autorFormat.js'
 
 export function useSemblanzaAuthor(autorId) {
   const isLoading = ref(false);
@@ -12,7 +13,7 @@ export function useSemblanzaAuthor(autorId) {
 
     try {
       const response = await getSemblanzaAuthor(autorId);
-      semblanzaAuthor.value = response.data;
+      semblanzaAuthor.value = formatSemblanzaAuthor(response.data.data);
     } catch (error) {
       isError.value = true;
     } finally {

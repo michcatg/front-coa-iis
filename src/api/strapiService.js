@@ -2,7 +2,7 @@ import http from './httpClient'
 import { STRAPI_URL } from './config'
 import { strapiAuthService } from './strapiAuth'
 
-function getStrapiBase(){
+export function getStrapiBase(){
   return STRAPI_URL
 }
 
