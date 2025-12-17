@@ -1,5 +1,5 @@
 <template>
-  <div class="modal is-active">
+  <div class="modal is-active is-max-desktop">
     <div
       class="modal-background"
       @click="emitClose"
@@ -11,9 +11,10 @@
         </slot>
       </header>
       <section class="modal-card-body">
-        <slot name="body">
-          <slot name="content"></slot>
-        </slot>
+        <div class="container">
+          <slot name="body">
+          </slot>
+        </div>
       </section>
       <footer class="modal-card-foot" v-if="$slots.footer">
         <slot name="footer"></slot>

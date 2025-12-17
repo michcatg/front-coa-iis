@@ -1,7 +1,7 @@
 <template>
-  <main>
-    <h1 class="title">Recoplicación</h1>
-    <h2 class="subtitle">Items</h2>
+  <section class="section container">
+    <h1 class="title is-3 mb-3">Recoplicación</h1>
+    <h2 class="subtitle is-5 has-text-grey">Items</h2>
     <div v-if="isLoading">Cargando...</div>
     <div v-else-if="isError">Error al cargar los items.</div>
     <media
@@ -10,7 +10,8 @@
       :key="item.id"
       :image-source="item.thumbnailSource"
     >
-      <strong>{{ item.title }}</strong> <small>{{ item.createdAt }}</small>
+      <h3><strong>{{ item.title }}</strong></h3>
+      <time :datetime="item.createdAt"><small>{{ item.createdAt }}</small></time>
       <moreLowText
         :text="item.description"
       />
@@ -23,7 +24,7 @@
             <li v-for="author in item.useAuthors.authors" :key="author.id">
               {{ author.gradoAcademico }} {{ author.nombres }} {{ author.apellidos }}
               <a class="has-text-link" @click="processSemblanzaAuthor(author)">
-                <font-awesome-icon :icon="faFile" /> Ver Semblanza
+                <font-awesome-icon :icon="faFile" /> Ver semblanza
               </a>
             </li>
           </ul>
@@ -32,21 +33,30 @@
     </media>
     <modal v-if="displayProfileAuthor" @close="displayProfileAuthor = false">
       <template #header>
-        <p class="modal-card-title">{{ selectedAuthor?.gradoAcademico }} {{ selectedAuthor?.nombres }} {{ selectedAuthor?.apellidos }}</p>
-        <button class="delete" aria-label="close" @click="displayProfileAuthor = false"></button>
+        <p class="modal-card-title">Sembalnza de la persona autora</p>
+        <button class="delete" aria-label="close" @click="displayProfileAuthor = false">
+          <font-awesome-icon :icon="faTimes" />
+        </button>
       </template>
       <template #body>
-        <div v-if="false">Cargando...</div>
-        <div v-else-if="false">Error al cargar la semblanza.</div>
+        <div v-if="isLoading">Cargando...</div>
+        <div v-else-if="isError">Error al cargar la semblanza.</div>
         <div v-else>
-          <autor-semblanza :author="selectedAuthor?.useSemblanza?.semblanzaAuthor" />
+          <autor-semblanza
+            :author="{
+              ...selectedAuthor?.useSemblanza?.semblanzaAuthor,
+              gradoAcademico: selectedAuthor?.gradoAcademico,
+              nombres: selectedAuthor?.nombres,
+              apellidos: selectedAuthor?.apellidos
+            }"
+          />
         </div>
       </template>
       <template #footer>
         <button class="button is-link" @click="displayProfileAuthor = false">Cerrar</button>
       </template>
     </modal>
-  </main>
+  </section>
 </template>
 <script setup>
   import { ref } from 'vue'
@@ -54,7 +64,7 @@
   import moreLowText from '@/components/basicFormats/moreLowText.vue'
   import { useSimpleItemsWithAuthors } from '@/composables/useSimpleItemsWithAuthors'
    import { useSemblanzaAuthor } from '@/composables/useSemblanzaAuthors'
-  import { faFile } from '@fortawesome/free-solid-svg-icons'
+  import { faFile, faTimes } from '@fortawesome/free-solid-svg-icons'
   import modal from '@/components/common/modal.vue'
   import autorSemblanza from '@/components/partials/autorSemblanza.vue'
 
@@ -75,4 +85,6 @@
 </script>
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/button";
+  @forward "bulma/sass/elements/title";
+  @forward "bulma/sass/elements/block";
 </style>

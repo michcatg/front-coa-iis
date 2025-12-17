@@ -1,9 +1,12 @@
+@forward "bulma/sass/utilities/initial-variables";
+@forward "bulma/sass/utilities/functions";
+@forward "bulma/sass/utilities/derived-variables";
 // Import and/or override Bulma variables at modules level
 @forward '@fortawesome/fontawesome-svg-core/styles.css';
-@use "bulma/sass/utilities" with(
+/*@use "bulma/sass/utilities" with(
   $family-primary: 'sans-serif',
   //$link: vars.$link,
-);
+);*/
 @forward "bulma/sass/base";
 
 /*Import layouts*/

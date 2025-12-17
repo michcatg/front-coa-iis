@@ -1,16 +1,18 @@
 <template>
   <div>
-    <h2 class="title">Semblanza del Autor</h2>
-    <p>{{ author?.institute }}</p>
-    <figure>
+    <h2 class="title is-5 mb-1">{{ author?.gradoAcademico }} {{ author?.nombres }} {{ author?.apellidos }}</h2>
+    <p class="content">{{ author?.institute }}</p>
+    <figure class="has-text-centered block">
       <img
         :src="author?.image?.url"
         :alt="author?.image?.alternativeText || `Foto de ${author?.name}`"
         :aria-label="author?.image?.ariaLabel || `Imagen del autor ${author?.name}`"
       />
-      <figcaption>{{ author?.image?.caption || `Autor: ${author?.name}` }}</figcaption>
+      <figcaption>
+        <p class=" content">{{ author?.image?.caption || `Autor: ${author?.name}` }}</p>
+      </figcaption>
     </figure>
-    <p v-for="(semblanzaPart, index) in author?.semblanza" :key="index">{{ semblanzaPart }}</p>
+    <p class="content" v-for="(semblanzaPart, index) in author?.semblanza" :key="index">{{ semblanzaPart }}</p>
   </div>
 </template>
 <script setup>
@@ -20,3 +22,7 @@
     }
   })
 </script>
+<style lang="scss" scoped>
+  @forward "bulma/sass/elements/title";
+  @forward "bulma/sass/elements/block";
+</style>
