@@ -15,10 +15,11 @@
       <moreLowText
         :text="item.description"
       />
-      <strong>Autores:</strong>
+      <strong>Personas autoras:</strong>
       <div>
         <template v-if="item.useAuthors.isLoading">Cargando autores...</template>
         <template v-else-if="item.useAuthors.isError">Error al cargar autores.</template>
+        <template v-else-if="item.useAuthors.authors.length === 0">No hay personas autoras asociadas.</template>
         <template v-else>
           <ul>
             <li v-for="author in item.useAuthors.authors" :key="author.id">
