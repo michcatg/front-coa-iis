@@ -27,3 +27,12 @@ export async function getSemblanzaAuthor(documentId){
   //return http.get(`${getStrapiBase()}/academicos/${documentId}?fields[0]=perfil&fields[1]=entidad_academica&populate[nombre_propio][populate][fotografia][fields][0]=url&populate[nombre_propio][populate][fotografia][fields][1]=mime&populate[nombre_propio][populate][fotografia][fields][2]=width&populate[nombre_propio][populate][fotografia][fields][3]=height&populate[nombre_propio][populate][fotografia][fields][4]=alternativeText&populate[nombre_propio][populate][fotografia][fields][5]=caption&populate[nombre_propio][fields][]`, authConfig)
   return http.get(`${getStrapiBase()}/autores/${documentId}?fields[0]=perfil&populate[fotografia][fields][0]=url&populate[fotografia][fields][1]=mime&populate[fotografia][fields][2]=width&populate[fotografia][fields][3]=height&populate[fotografia][fields][4]=alternativeText&populate[fotografia][fields][5]=caption&populate[entidad_academica][fields][0]=nombre`, authConfig)
 }
+
+/**
+ * Obtiene las categorías de los ítems
+ * @returns {Promise} Respuesta con las categorías
+*/
+export async function getCategories(){
+  const authConfig = strapiAuthService.getAuthConfig()
+  return http.get(`${getStrapiBase()}/categorias`, authConfig)
+}

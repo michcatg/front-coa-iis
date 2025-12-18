@@ -8,7 +8,20 @@ const router = createRouter({
       name: 'item',
       component: () => import('../views/ExploreItems.vue'),
       props: true,
-    }
+    },
+    {
+      path: '/categories/',
+      name: 'categories',
+      component: () => import('../views/ExploreCategories.vue'),
+      props: true,
+    },
+    {
+      path: '/categories/:slug',
+      name: 'category',
+      // TODO: Crear vista específica para categoría
+      component: () => import('../views/ExploreCategories.vue'),
+      props: true,
+    },
   ],
 })
 
