@@ -1,4 +1,4 @@
-import { getItemsCategories } from '@/api/strapiService'
+import { getCategories } from '@/api/strapiService'
 import { useApiQuery } from '@/shared/infraestructure/useApiQuery.js'
 
 export function useCategories({
@@ -6,7 +6,7 @@ export function useCategories({
   retry= 1
 } = {} ) {
   const apiQuery = useApiQuery({ 
-    queryFn: getItemsCategories,
+    queryFn: getCategories,
     immediate: immediate,
     retry: retry
   })
