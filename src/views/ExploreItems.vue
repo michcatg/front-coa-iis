@@ -28,6 +28,18 @@
                 <font-awesome-icon :icon="faFile" /> Ver semblanza
               </a>
             </li>
+            <li
+              v-for="(authorName, index) in item.authors.filter(authorName =>
+              !item.useAuthors.authors.some(
+                author =>
+                authorName === `${author.apellidos}, ${author.nombres}`
+              )
+              )"
+              :key="`name-${index}`"
+            >
+              {{ authorName }}
+              <span class="tag is-info is-light is-rounded">Sin perfil</span>
+            </li>
           </ul>
         </template>
       </div>
