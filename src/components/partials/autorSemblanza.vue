@@ -12,10 +12,13 @@
         <p class=" content">{{ author?.image?.caption || `Autor: ${author?.name}` }}</p>
       </figcaption>
     </figure>
-    <p class="content" v-for="(semblanzaPart, index) in author?.semblanza" :key="index">{{ semblanzaPart }}</p>
+    <div class="content">
+      <rich-text-block :blocks="author?.semblanza || []" />
+    </div>
   </div>
 </template>
 <script setup>
+  import RichTextBlock from '@/shared/presentation/richTextBlock/index.vue'
   const props = defineProps({
     author: {
       type: Object
