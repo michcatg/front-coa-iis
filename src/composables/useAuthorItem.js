@@ -4,7 +4,7 @@ import { getOmekaBase as itemSourceURL } from '@/api/omekasService.js'
 import { toAutorItemDto } from '@/application/adapters/autorAdapter'
 import { autorItemDtoToEntity } from '@/application/adapters/autorAdapter'
 
-export function useItemSimpleAuthors(item) {
+export function useAuthorItem(item) {
   const isLoading = ref(false)
   const isError = ref(false)
   const authors = ref([])

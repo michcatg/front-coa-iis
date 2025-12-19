@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { getSemblanzaAuthor } from '@/api/strapiService.js'
 import { toAutorProfileDto } from '@/application/adapters/autorAdapter.js'
 
-export function useSemblanzaAuthor(autor) {
+export function useAuthorProfile(autor) {
   const isLoading = ref(false);
   const isError = ref(false);
   const semblanzaAuthor = ref(null);

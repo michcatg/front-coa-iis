@@ -1,10 +1,10 @@
 import { ref } from "vue";
-import { useSimpleItems } from "./useSimpleItems";
-import { useItemSimpleAuthors } from "./useItemSimpleAuthors";
+import { useItemsResume } from "./useItemsResume";
+import { useAuthorItem } from "./useAuthorItem";
 import { compareStrings } from "@/utils/stringHelpers";
 
-export function useSimpleItemsWithAuthors() {
-  const simpleItems = useSimpleItems();
+export function useItemsResumeWithAuthors() {
+  const simpleItems = useItemsResume();
   const isLoading = ref(false);
   const isError = ref(false);
   const itemsWithAuthors = ref([]);
@@ -26,7 +26,7 @@ export function useSimpleItemsWithAuthors() {
   }
 
   const fetchAuthorItem = async (item) => {
-    const simpleAuthors = useItemSimpleAuthors(item);
+    const simpleAuthors = useAuthorItem(item);
     try {
       await simpleAuthors.fetchAuthors();
     } catch (error) {

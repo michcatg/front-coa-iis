@@ -89,7 +89,7 @@
         <div v-else-if="isError">Error al cargar la semblanza.</div>
         <div v-else>
           <autor-semblanza
-            :author="selectedAuthor?.useSemblanza?.semblanzaAuthor"
+            :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
           />
         </div>
       </template>
@@ -102,22 +102,22 @@
 <script setup>
   import { ref } from 'vue'
   import moreLowText from '@/components/basicFormats/moreLowText.vue'
-  import { useSimpleItemsWithAuthors } from '@/composables/useSimpleItemsWithAuthors'
-   import { useSemblanzaAuthor } from '@/composables/useSemblanzaAuthors'
+  import { useItemsResumeWithAuthors } from '@/composables/useItemsResumeWithAuthors'
+  import { useAuthorProfile } from '@/composables/useAuthorProfile'
   import { faFile, faTimes, faUserSlash } from '@fortawesome/free-solid-svg-icons'
   import modal from '@/components/common/modal.vue'
   import autorSemblanza from '@/components/partials/autorSemblanza.vue'
 
-  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors } = useSimpleItemsWithAuthors()
+  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors } = useItemsResumeWithAuthors()
   fetchItemsWithAuthors()
 
   const displayProfileAuthor = ref(false)
   const selectedAuthor = ref(null)
 
   async function processSemblanzaAuthor(author){
-    if (!author.useSemblanza) {
-      author.useSemblanza = useSemblanzaAuthor(author);
-      author.useSemblanza.fetchSemblanzaAuthor();
+    if (!author.useAuthorProfile) {
+      author.useAuthorProfile = useAuthorProfile(author);
+      author.useAuthorProfile.fetchSemblanzaAuthor();
     }
     selectedAuthor.value = author
     displayProfileAuthor.value = true
