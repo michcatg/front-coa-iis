@@ -1,3 +1,4 @@
+// TODO: REMOVER UNA VEZ SE COMPRUEBE LOS ADAPTERS
 export function formatSimpleItem(item){
   if (!item) return null;
 

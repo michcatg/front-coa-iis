@@ -1,6 +1,6 @@
 import { ref, shallowRef } from "vue";
 import { getRecentOmekasItems as getItemsApi } from '@/api/omekasService.js'
-import { formatSimpleItem } from "@/utils/format/simpleItemFormat";
+import { toItemResumeDto } from "@/application/adapters/itemAdapter.js";
 
 export function useSimpleItems() {
   const isLoading = ref(false)
@@ -13,7 +13,7 @@ export function useSimpleItems() {
 
     try {
       const response = await getItemsApi(itemId)
-      items.value = response.data.map(formatSimpleItem)
+      items.value = response.data.map(toItemResumeDto)
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error)
