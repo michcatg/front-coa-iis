@@ -8,6 +8,10 @@
   //$link: vars.$link,
 );*/
 @forward "bulma/sass/base";
+@forward "bulma/sass/base/skeleton";
+@forward "bulma/sass/helpers/visibility";
+@forward "bulma/sass/helpers/flexbox";
+@forward "bulma/sass/helpers/color";
 
 /*Import layouts*/
 @forward "bulma/sass/layout";
@@ -20,4 +24,5 @@
 // Import the themes so that all CSS variables have a value
 @forward "bulma/sass/themes";
 
-@import "bulma/sass/elements/content";
+@forward "bulma/sass/elements/content";
+@forward "bulma/sass/grid";

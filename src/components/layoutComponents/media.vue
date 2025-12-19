@@ -1,5 +1,6 @@
 <template>
   <article class="media">
+    <!-- TODO: Evaluar si eliminar-->
     <figure class="media-left">
       <p class="image is-64x64">
         <img :src="thumbnailSrc" />
