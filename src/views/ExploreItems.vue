@@ -51,7 +51,7 @@
               <template v-else>
                 <ul>
                   <li v-for="author in item.useAuthors.authors" :key="author.id">
-                    {{ author.gradoAcademico }} {{ author.nombres }} {{ author.apellidos }}
+                    {{ author.nombreCompleto }}
                     <a class="has-text-link" @click="processSemblanzaAuthor(author)">
                       <font-awesome-icon :icon="faFile" /> Ver semblanza
                     </a>

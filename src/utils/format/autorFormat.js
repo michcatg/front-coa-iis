@@ -1,5 +1,6 @@
 import { formatImageMedia } from '@/utils/format/ImageMediaFormat';
 
+// TODO: Eliinar esta función porque se usa el autorAdapter
 export function formatSimpleAuthor(author) {
   if (!author) return null;
   return {

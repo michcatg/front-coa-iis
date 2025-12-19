@@ -1,7 +1,8 @@
 import { ref } from "vue";
 import { getAuthorsForItemSource } from '@/api/strapiService.js'
 import { getOmekaBase as itemSourceURL } from '@/api/omekasService.js'
-import { formatSimpleAuthor } from "@/utils/format/autorFormat";
+import { toAutorItemDto } from '@/application/adapters/autorAdapter'
+import { autorItemDtoToEntity } from '@/application/adapters/autorAdapter'
 
 export function useItemSimpleAuthors(item) {
   const isLoading = ref(false)
@@ -14,7 +15,13 @@ export function useItemSimpleAuthors(item) {
 
     try {
       const response = await getAuthorsForItemSource(item.source.replace(itemSourceURL(), ''))
-      const authorsArray = response.data?.data?.[0]?.autores.map(formatSimpleAuthor) || []
+      const authorsArray = response.data?.data?.[0]?.autores.map(authorDto => {
+        const dto = toAutorItemDto(authorDto)
+        return {
+          ...dto,
+          nombreCompleto: autorItemDtoToEntity(dto).getNombreCompleto()
+        }
+      }) || []
       authors.value = authorsArray
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
