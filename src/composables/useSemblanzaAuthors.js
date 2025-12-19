@@ -1,8 +1,8 @@
 import { ref } from "vue";
 import { getSemblanzaAuthor } from '@/api/strapiService.js'
-import { formatSemblanzaAuthor } from '@/utils/format/autorFormat.js'
+import { toAutorProfileDto } from '@/application/adapters/autorAdapter.js'
 
-export function useSemblanzaAuthor(autorId) {
+export function useSemblanzaAuthor(autor) {
   const isLoading = ref(false);
   const isError = ref(false);
   const semblanzaAuthor = ref(null);
@@ -12,8 +12,12 @@ export function useSemblanzaAuthor(autorId) {
     isError.value = false;
 
     try {
-      const response = await getSemblanzaAuthor(autorId);
-      semblanzaAuthor.value = formatSemblanzaAuthor(response.data.data);
+      const response = await getSemblanzaAuthor(autor.id);
+      semblanzaAuthor.value = toAutorProfileDto({
+        ...autor,
+        ...response.data.data
+      });
+      semblanzaAuthor.value.nombreCompleto = `${autor.gradoAcademico} ${autor.nombreCompleto}`;
     } catch (error) {
       isError.value = true;
     } finally {

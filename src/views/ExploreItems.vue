@@ -87,12 +87,7 @@
         <div v-else-if="isError">Error al cargar la semblanza.</div>
         <div v-else>
           <autor-semblanza
-            :author="{
-              ...selectedAuthor?.useSemblanza?.semblanzaAuthor,
-              gradoAcademico: selectedAuthor?.gradoAcademico,
-              nombres: selectedAuthor?.nombres,
-              apellidos: selectedAuthor?.apellidos
-            }"
+            :author="selectedAuthor?.useSemblanza?.semblanzaAuthor"
           />
         </div>
       </template>
@@ -119,7 +114,7 @@
 
   async function processSemblanzaAuthor(author){
     if (!author.useSemblanza) {
-      author.useSemblanza = useSemblanzaAuthor(author.id);
+      author.useSemblanza = useSemblanzaAuthor(author);
       author.useSemblanza.fetchSemblanzaAuthor();
     }
     selectedAuthor.value = author

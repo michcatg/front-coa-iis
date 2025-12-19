@@ -1,3 +1,4 @@
+// TODO: REMOVER UNA VEZ SE COMPRUEBE LOS ADAPTERS
 import { formatImageMedia } from '@/utils/format/ImageMediaFormat';
 
 // TODO: Eliinar esta función porque se usa el autorAdapter
@@ -11,6 +12,7 @@ export function formatSimpleAuthor(author) {
   };
 }
 
+// TODO: Eliminar esta función porque se usa el autorAdapter
 export function formatSemblanzaAuthor(author) {
   if (!author) return null;
   return {

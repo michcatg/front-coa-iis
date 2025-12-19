@@ -1,3 +1,4 @@
+// TODO: REMOVER UNA VEZ SE COMPRUEBE LOS ADAPTERS
 import { getStrapiBase } from '@/api/strapiService.js'
 export function formatImageMedia(media) {
   if (!media) return null;
