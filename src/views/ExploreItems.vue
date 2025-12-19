@@ -35,10 +35,7 @@
             />
             <section class="content">
               <strong>Personas autoras:</strong>
-              <p v-if="item.useAuthors.isLoading">Cargando autores...</p>
-              <p v-else-if="item.useAuthors.isError">Error al cargar autores.</p>
-              <p
-                v-else-if="item.useAuthors.authors.length === 0"
+              <p v-if="item.authors.length === 0"
                 class="tag is-info is-light is-rounded ml-2"
                 aria-live="polite"
                 role="status"
@@ -50,25 +47,30 @@
               </p>
               <template v-else>
                 <ul>
-                  <li v-for="author in item.useAuthors.authors" :key="author.id">
-                    {{ author.nombreCompleto }}
-                    <a class="has-text-link" @click="processSemblanzaAuthor(author)">
-                      <font-awesome-icon :icon="faFile" /> Ver semblanza
-                    </a>
-                  </li>
-                  <li
-                    v-for="(authorName, index) in item.authors.filter(authorName =>
-                    !item.useAuthors.authors.some(
-                      author =>
-                      authorName === `${author.apellidos}, ${author.nombres}`
-                    )
-                    )"
-                    :key="`name-${index}`"
-                  >
-                    {{ authorName }}
-                    <small class="tag is-info is-light is-rounded" aria-label="Sin perfil" title="Sin perfil" role="status">Sin perfil</small>
+                  <li v-for="author in item.authors" :key="author.id">
+                    <template v-if="typeof author === 'string'">
+                      {{ author }}
+                      <small class="tag is-info is-light is-rounded" aria-label="Sin perfil" title="Sin perfil" role="status">Sin perfil</small>
+                    </template>
+                    <template v-else>
+                      {{ author.nombreCompleto }}
+                      <a class="has-text-link" @click="processSemblanzaAuthor(author)">
+                        <font-awesome-icon :icon="faFile" /> Ver semblanza
+                      </a>
+                    </template>
                   </li>
                 </ul>
+                <p
+                  v-if="item.isErrorAuthorsProfile"
+                  class="tag is-danger is-light is-rounded ml-2"
+                  aria-live="polite"
+                  role="status"
+                >
+                  <span class="icon" aria-hidden="true">
+                    <font-awesome-icon :icon="faUserSlash" />
+                  </span>
+                  <span>Error al comprobar el perfil de los autores.</span>
+                </p>
               </template>
             </section>
           </div>

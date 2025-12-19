@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { useSimpleItems } from "./useSimpleItems";
 import { useItemSimpleAuthors } from "./useItemSimpleAuthors";
+import { compareStrings } from "@/utils/stringHelpers";
 
 export function useSimpleItemsWithAuthors() {
   const simpleItems = useSimpleItems();
@@ -12,7 +13,8 @@ export function useSimpleItemsWithAuthors() {
     isLoading.value = true;
     try {
       await simpleItems.fetchItems();
-      itemsWithAuthors.value = await Promise.all(simpleItems.items.value.map(fetchAuthorItem));
+      itemsWithAuthors.value = simpleItems.items.value
+      itemsWithAuthors.value = await Promise.all(itemsWithAuthors.value.map(fetchAuthorItem));
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error);
@@ -25,11 +27,26 @@ export function useSimpleItemsWithAuthors() {
 
   const fetchAuthorItem = async (item) => {
     const simpleAuthors = useItemSimpleAuthors(item);
-    await simpleAuthors.fetchAuthors();
-    return {
-      ...item,
-      useAuthors: simpleAuthors
-    };
+    try {
+      await simpleAuthors.fetchAuthors();
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error(error);
+      }
+    }finally {
+      return {
+        ...item,
+        authors: [
+          ...simpleAuthors.authors.value,
+          ...item.authors.filter(authorName =>
+            !simpleAuthors.authors.value.some(
+              author => compareStrings(authorName, `${author.primerApellido} ${author.segundoApellido}, ${author.nombres}`)
+            )
+          )
+        ],
+        isErrorAuthorsProfile: simpleAuthors.isError
+      };
+    }
   };
 
   return {
