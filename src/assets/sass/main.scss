@@ -1,12 +1,15 @@
+/*
+// TODO: Evaluar si dejar todas las importaciones de utilities con el use
+
 @forward "bulma/sass/utilities/initial-variables";
 @forward "bulma/sass/utilities/functions";
 @forward "bulma/sass/utilities/derived-variables";
+*/
 // Import and/or override Bulma variables at modules level
 @forward '@fortawesome/fontawesome-svg-core/styles.css';
-/*@use "bulma/sass/utilities" with(
-  $family-primary: 'sans-serif',
-  //$link: vars.$link,
-);*/
+@use "bulma/sass/utilities" with(
+  $primary: #A8084D,
+);
 @forward "bulma/sass/base";
 @forward "bulma/sass/base/skeleton";
 @forward "bulma/sass/helpers/visibility";

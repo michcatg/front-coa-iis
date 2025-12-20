@@ -50,7 +50,7 @@
                   <li v-for="author in item.authors" :key="author.id">
                     <template v-if="typeof author === 'string'">
                       {{ author }}
-                      <small class="tag is-info is-light is-rounded" aria-label="Sin perfil" title="Sin perfil" role="status">Sin perfil</small>
+                      <small class="tag is-info is-light is-rounded" aria-label="Sin semblanza" title="Sin semblanza" role="status">Sin semblanza</small>
                     </template>
                     <template v-else>
                       {{ author.nombreCompleto }}
@@ -69,7 +69,7 @@
                   <span class="icon" aria-hidden="true">
                     <font-awesome-icon :icon="faUserSlash" />
                   </span>
-                  <span>Error al comprobar el perfil de los autores.</span>
+                  <span>Error al comprobar la semblanza de los autores.</span>
                 </p>
               </template>
             </section>
@@ -79,10 +79,12 @@
     </ul>
     <modal v-if="displayProfileAuthor" @close="displayProfileAuthor = false">
       <template #header>
-        <p class="modal-card-title">Sembalnza de la persona autora</p>
-        <button class="delete" aria-label="close" @click="displayProfileAuthor = false">
-          <font-awesome-icon :icon="faTimes" />
-        </button>
+        <div class="is-flex is-justify-content-space-between is-align-items-center" style="width: 100%">
+          <h2 class="modal-card-title title is-3 mb-0 has-text-white">Semblanza</h2>
+          <button class=" button is-rounded p-1 has-background-white has-text-primary" aria-label="close" @click="displayProfileAuthor = false">
+            <font-awesome-icon :icon="faTimes" />
+          </button>
+        </div>
       </template>
       <template #body>
         <div v-if="isLoading">Cargando...</div>

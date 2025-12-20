@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="title is-5 mb-1">{{ author?.nombreCompleto }}</h2>
+    <h3 class="title is-5 mb-1">{{ author?.nombreCompleto }}</h3>
     <p class="content">{{ author?.institute }}</p>
     <figure class="has-text-centered block">
       <img

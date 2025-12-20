@@ -5,7 +5,7 @@
       @click="emitClose"
     ></div>
     <div class="modal-card">
-      <header class="modal-card-head" v-if="$slots.header">
+      <header class="modal-card-head has-background-primary" v-if="$slots.header">
         <slot name="header">
           <button class="delete" aria-label="close"></button>
         </slot>
