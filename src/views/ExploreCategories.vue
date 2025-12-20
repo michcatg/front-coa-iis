@@ -3,14 +3,21 @@
     <h1 class="title is-3 mb-3">Explorar por categorías</h1>
     <div v-if="isError">Error al cargar los items.</div>
     <div v-else
-      class="fixed-grid has-4-cols"
+      class="columns is-multiline"
     >
-      <div class="grid">
-        <SkeletonCard v-if="isLoading" v-for="n in 4" :key="n" />
+      <div
+        class="column is-12-mobile is-6-tablet is-3-desktop"
+        v-if="isLoading"
+        v-for="n in 4" :key="n"
+      >
+        <SkeletonCard/>
+      </div>
+      <div
+        class="column is-12-mobile is-6-tablet is-3-desktop"
+        v-else
+        v-for="category in categories" :key="category.name"
+      >
         <Card
-          v-else
-          v-for="category in categories"
-          :key="category.name"
           :imgSrc="category.thumbnailSource || 'https://bulma.io/assets/images/placeholders/1280x960.png'"
           :alt="category.name"
         >
