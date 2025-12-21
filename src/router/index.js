@@ -6,7 +6,7 @@ const router = createRouter({
     {
       path: '/items/',
       name: 'items',
-      component: () => import('../views/ExploreItems.vue'),
+      component: () => import('../views/ExploreItems/ExploreItems.vue'),
       props: route => ({ categories: route.query.categories }),
     },
     {
@@ -22,6 +22,12 @@ const router = createRouter({
       component: () => import('../views/ExploreCategories.vue'),
       props: true,
     },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('../views/Test.vue'),
+      props: true,
+    }
   ],
 })
 
