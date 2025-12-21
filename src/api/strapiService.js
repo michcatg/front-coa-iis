@@ -6,6 +6,7 @@ export function getStrapiBase(){
   return STRAPI_URL
 }
 
+// TODO: Revisar para eliminar función que está mal formulada
 /**
  * Obtiene los autores de un recurso digital por su fuente
  * @param {string} source - Fuente del recurso digital
@@ -35,4 +36,21 @@ export async function getSemblanzaAuthor(documentId){
 export async function getCategories(){
   const authConfig = strapiAuthService.getAuthConfig()
   return http.get(`${getStrapiBase()}/categorias`, authConfig)
+}
+
+/**
+ * Obtiene los source de los ítems que están catalogados bajo las categorías especificadas
+ * @param {Array<string|number>} categoryIds - DocumentIDs de las categorías
+ * @returns {Promise} Respuesta con los source de los ítems
+*/
+export async function getItemSourcesByCategories(categoryIds = null){
+  const authConfig = strapiAuthService.getAuthConfig()
+  const filterQuery = categoryIds && categoryIds.length > 0 ? getFilterItemCategories(categoryIds) : ''
+  const url = `${getStrapiBase()}/recursos-digitales?${filterQuery}${filterQuery ? '&' : ''}fields[0]=source`
+  return http.get(url, authConfig)
+}
+function getFilterItemCategories(categoryIds) {
+  return categoryIds
+    .map((id, idx) => `filters[$or][${idx}][categoria][documentId][$eq]=${id}`)
+    .join('&')
 }

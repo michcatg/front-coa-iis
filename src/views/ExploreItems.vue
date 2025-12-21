@@ -102,16 +102,60 @@
   </section>
 </template>
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch, onMounted, triggerRef } from 'vue'
   import moreLowText from '@/components/basicFormats/moreLowText.vue'
   import { useItemsResumeWithAuthors } from '@/composables/useItemsResumeWithAuthors'
   import { useAuthorProfile } from '@/composables/useAuthorProfile'
+  import { useItemsCategories } from '@/composables/useItemsCategories'
   import { faFile, faTimes, faUserSlash } from '@fortawesome/free-solid-svg-icons'
   import modal from '@/components/common/modal.vue'
   import autorSemblanza from '@/components/partials/autorSemblanza.vue'
 
-  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors } = useItemsResumeWithAuthors()
-  fetchItemsWithAuthors()
+  const props = defineProps({
+    categories: {
+      type: [Array, String],
+      default: null
+    }
+  })
+
+  const useItemsCategoriesInstance = useItemsCategories()
+
+  onMounted(() => {
+    if (Array.isArray(props.categories)) {
+      useItemsCategoriesInstance.categories.value = props.categories
+    } else if (typeof props.categories === 'string' && props.categories) {
+      useItemsCategoriesInstance.categories.value = [props.categories]
+    } else {
+      useItemsCategoriesInstance.categories.value = []
+    }
+    triggerRef(useItemsCategoriesInstance.categories);
+  })
+
+  watch(
+    () => useItemsCategoriesInstance.categories.value,
+    (newValue) => {
+      if (newValue.length > 0) {
+        useItemsCategoriesInstance.fetchItems();
+      }else {
+        searchOptions.value.ids = undefined
+        fetchItemsWithAuthors()
+      }
+  });
+const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors, searchOptions, cleanItemsState } = useItemsResumeWithAuthors()
+
+  watch (
+    () => useItemsCategoriesInstance.items.value,
+    (newItems) => {
+      if (newItems) {
+        if(newItems.length > 0) {
+          searchOptions.value.ids = newItems.map(item => item.source.replace(/^\/items\//, ''))
+          fetchItemsWithAuthors()
+        } else {
+          cleanItemsState()
+        }
+      }
+    }
+  )
 
   const displayProfileAuthor = ref(false)
   const selectedAuthor = ref(null)

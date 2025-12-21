@@ -1,4 +1,5 @@
 import { ItemResumeDto } from "@/application/dtos/ItemResumeDto";
+import { ItemStrapiDto } from "@/application/dtos/ItemStrapiDto";
 
 export function toItemResumeDto(apiData) {
   return new ItemResumeDto({
@@ -10,5 +11,12 @@ export function toItemResumeDto(apiData) {
       apiData['dcterms:description'][0]['@value'] : apiData['dcterms:abstract'] ?
         apiData['dcterms:abstract'][0]['@value'] : '',
     authors: apiData['dcterms:creator'] ? apiData['dcterms:creator'].map(creator => creator['@value']) : [],
+  });
+}
+
+export function toItemStrapiDto(apiData) {
+  return new ItemStrapiDto({
+    id: apiData.documentId,
+    source: apiData.source,
   });
 }

@@ -5,9 +5,9 @@ const router = createRouter({
   routes: [
     {
       path: '/items/',
-      name: 'item',
+      name: 'items',
       component: () => import('../views/ExploreItems.vue'),
-      props: true,
+      props: route => ({ categories: route.query.categories }),
     },
     {
       path: '/categories/',

@@ -11,9 +11,21 @@ export function getOmekaBase() {
   return OMEKAS_URL
 }
 
-
-export async function getRecentOmekasItems(limit = 5) {
+export async function getRecentOmekaItems(queryOptions=null,limit = 5) {
   return http.get(`${getOmekaBase()}/items`, {
-    params: { sort_by: 'added', sort_order: 'desc', per_page: limit }
+    params: {
+      ...(queryOptions ? processOmekasQueryOptions(queryOptions) : {}),
+      sort_by: 'added',
+      sort_order: 'desc',
+      per_page: limit
+    }
   })
+}
+
+function processOmekasQueryOptions(queryOptions) {
+  const params = {}
+  if (queryOptions.ids) {
+    params.id = queryOptions.ids.join(',')
+  }
+  return params
 }
