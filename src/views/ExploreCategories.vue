@@ -23,7 +23,10 @@
         >
           <router-link
             class="title is-4"
-            :to="`/categories/${category.slug}/items`"
+            :to="{
+              name: 'items',
+              query: { categories: category.id }
+            }"
           >
             {{ category.name }}
           </router-link>
