@@ -1,6 +1,7 @@
 import http from './httpClient'
 import { STRAPI_URL } from './config'
 import { strapiAuthService } from './strapiAuth'
+import { getFilterCategories } from './strapiHelpers'
 
 export function getStrapiBase(){
   return STRAPI_URL
@@ -45,12 +46,14 @@ export async function getCategories(){
 */
 export async function getItemSourcesByCategories(categoryIds = null){
   const authConfig = strapiAuthService.getAuthConfig()
-  const filterQuery = categoryIds && categoryIds.length > 0 ? getFilterItemCategories(categoryIds) : ''
+  const filterQuery = categoryIds && categoryIds.length > 0 ? getFilterCategories(categoryIds) : ''
   const url = `${getStrapiBase()}/recursos-digitales?${filterQuery}${filterQuery ? '&' : ''}fields[0]=source`
   return http.get(url, authConfig)
 }
-function getFilterItemCategories(categoryIds) {
-  return categoryIds
-    .map((id, idx) => `filters[$or][${idx}][categoria][documentId][$eq]=${id}`)
-    .join('&')
+
+export async function getResourceTemplatesSourceByCategories(categoryIds = null){
+  const authConfig = strapiAuthService.getAuthConfig()
+  const filterQuery = categoryIds && categoryIds.length > 0 ? getFilterCategories(categoryIds) : ''
+  const url = `${getStrapiBase()}/template-recurso-digitals?${filterQuery}${filterQuery ? '&' : ''}fields[0]=source&populate[categorias][fields][0]=documentId`
+  return http.get(url, authConfig)
 }

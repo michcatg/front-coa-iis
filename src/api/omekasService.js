@@ -27,5 +27,15 @@ function processOmekasQueryOptions(queryOptions) {
   if (queryOptions.ids) {
     params.id = queryOptions.ids.join(',')
   }
+  if (queryOptions.fullQuery?.fulltext_search) {
+    params.fulltext_search = queryOptions.fullQuery.fulltext_search
+  }
+  if (queryOptions.fullQuery?.property) {
+    params.property = queryOptions.fullQuery.property
+  }
   return params
+}
+
+export async function getOmekasProperties() {
+  return http.get(`${getOmekaBase()}/properties`)
 }

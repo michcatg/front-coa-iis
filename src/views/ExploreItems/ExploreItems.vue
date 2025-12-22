@@ -1,5 +1,6 @@
 <template>
   <section class="section container">
+    <search-form @search="executeAdvancedSearch" />
     <div class="columns">
       <!-- Aside de facets -->
       <aside class="column is-2" aria-label="Filtros">
@@ -47,6 +48,7 @@
   import CategoriesFacet from './CategoriesFacet.vue'
   import ItemsList from './ItemsList.vue'
   import ProfileAuthorModal from './ProfileAuthorModal.vue'
+  import SearchForm from './SearchForm.vue'
 
   const props = defineProps({
     categories: {
@@ -121,6 +123,14 @@
     router.push({ name: 'items', query: { categories: newValue } })
     useItemsCategoriesInstance.categories.value = [...newValue]
     triggerRef(useItemsCategoriesInstance.categories)
+  }
+
+  function executeAdvancedSearch(fullQuery){
+    console.log(fullQuery)
+    if (!fullQuery) return;
+    cleanState()
+    searchOptions.value.fullQuery = fullQuery
+    fetchItemsWithAuthors()
   }
 </script>
 <style lang="scss" scoped>
