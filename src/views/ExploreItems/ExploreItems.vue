@@ -117,15 +117,22 @@
 </script>
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/title";
-  @forward "bulma/sass/elements/block";
   @forward "bulma/sass/elements/button";
-  @forward "bulma/sass/elements/tag";
-  .catalogo-items {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .catalogo-items > li.has-border-top {
-    border-top: 1px solid #e3e7ed;
+  @media (max-width: 1024px) {
+    aside[aria-label="Filtros"] {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      max-height: 60vh;
+      z-index: 1000;
+      background: #fff;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.12);
+      overflow-y: auto;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      padding: 1.5rem 1rem;
+      transition: box-shadow 0.2s;
+    }
   }
 </style>

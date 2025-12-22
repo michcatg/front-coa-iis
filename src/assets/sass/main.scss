@@ -10,6 +10,8 @@
 @use "bulma/sass/utilities" with(
   $primary: #A8084D,
 );
+// #F4F4F9 ghost white
+// #FCF7FF magnolia
 @forward "bulma/sass/base";
 @forward "bulma/sass/base/skeleton";
 @forward "bulma/sass/helpers/visibility";
@@ -29,3 +31,7 @@
 
 @forward "bulma/sass/elements/content";
 @forward "bulma/sass/grid";
+
+body{
+  background-color: #FCF7FF;
+}
