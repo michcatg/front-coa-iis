@@ -60,38 +60,28 @@
   const categoriesSelected = ref([])
 
   onMounted(() => {
-    if (Array.isArray(props.categories)) {
-      useItemsCategoriesInstance.categories.value = props.categories
-    } else if (typeof props.categories === 'string' && props.categories) {
-      useItemsCategoriesInstance.categories.value = [props.categories]
-    } else {
-      useItemsCategoriesInstance.categories.value = []
+    if(props.categories !== null) {
+      useItemsCategoriesInstance.setCategories(
+        typeof props.categories === 'string'
+          ? [props.categories]
+          : props.categories
+      );
     }
     categoriesSelected.value = [...useItemsCategoriesInstance.categories.value]
-    triggerRef(useItemsCategoriesInstance.categories);
 
     watch(
     () => useItemsCategoriesInstance.categories.value,
     (newValue) => {
-      if (newValue.length > 0) {
-        useItemsCategoriesInstance.fetchItems();
-        console.log('Categories selected:', newValue);
-      }else {
-        console.log('No categories selected, clearing item IDs filter.');
-        delete searchOptions.value.ids
-        fetchItemsWithAuthors()
-      }
+      processCategoriesChanges(newValue)
     });
 
     watch (
       () => useItemsCategoriesInstance.items.value,
       (newItems) => {
-        console.log('New items from categories:', newItems)
         if (newItems) {
           if(newItems.length > 0) {
             searchOptions.value.ids = newItems.map(item => item.source.replace(/^\/items\//, ''))
             fetchItemsWithAuthors()
-            console.log('Search options updated:', searchOptions.value)
           } else if (useItemsCategoriesInstance.categories.value.length === 0) {
             if (searchOptions.value.ids) delete searchOptions.value.ids
           } else {
@@ -101,12 +91,22 @@
         }
       }
     )
+    processCategoriesChanges(useItemsCategoriesInstance.categories.value)
   })
-  
+
+  function processCategoriesChanges(categories){
+    if (categories.length > 0) {
+      useItemsCategoriesInstance.fetchItems();
+    } else {
+      if (searchOptions.value.ids) delete searchOptions.value.ids
+      fetchItemsWithAuthors()
+    }
+  }
+
+  /** Inicio perfil-autor-process */
   const displayProfileAuthor = ref(false)
   const selectedAuthor = ref(null)
 
-  /** Permite recuperar el perfil del autor en caso de que no se haya cargado */
   async function processSemblanzaAuthor(author){
     if (!author.useAuthorProfile) {
       author.useAuthorProfile = useAuthorProfile(author);
@@ -115,6 +115,7 @@
     selectedAuthor.value =  author
     displayProfileAuthor.value = true
   }
+  /** FIN  perfil-autor-process */
 
   function processFacet(newValue) {
     router.push({ name: 'items', query: { categories: newValue } })

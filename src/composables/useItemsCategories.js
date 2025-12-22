@@ -42,6 +42,11 @@ export function useItemsCategories() {
     triggerRef(categories);
   }
 
+  function setCategories(newCategories){
+    categories.value = [...newCategories];
+    triggerRef(categories);
+  }
+
   return {
     isLoading,
     isError,
@@ -50,5 +55,6 @@ export function useItemsCategories() {
     categories,
     addCategory,
     removeCategory,
+    setCategories,
   }
 }
