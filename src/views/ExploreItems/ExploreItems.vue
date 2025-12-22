@@ -6,8 +6,10 @@
         <CategoriesFacet @update:model-value="processFacet" v-model="categoriesSelected" />
       </aside>
       <main class="column">
-        <h1 class="title is-3 mb-3">Explorar Items</h1>
-        <h2 class="subtitle is-5 has-text-grey">Resultados</h2>
+        <header>
+          <h1 class="title is-3 mb-3">Explorar Items</h1>
+          <h2 class="subtitle is-5 has-text-grey">Resultados</h2>
+        </header>
         <div class="columns">
           <div class="column is-half">
             <p>Se muestran {{ itemsWithAuthors.length }} items.</p>
@@ -88,28 +90,13 @@
           </li>
         </ul>
       </main>
-      <modal v-if="displayProfileAuthor" @close="displayProfileAuthor = false">
-        <template #header>
-          <div class="is-flex is-justify-content-space-between is-align-items-center" style="width: 100%">
-            <h2 class="modal-card-title title is-3 mb-0 has-text-white">Semblanza</h2>
-              <button class=" button is-rounded p-1 has-background-white has-text-primary" aria-label="close" @click="displayProfileAuthor = false">
-              <font-awesome-icon :icon="faTimes" />
-              </button>
-          </div>
-        </template>
-        <template #body>
-          <div v-if="isLoading">Cargando...</div>
-          <div v-else-if="isError">Error al cargar la semblanza.</div>
-          <div v-else>
-            <autor-semblanza
-              :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
-            />
-          </div>
-        </template>
-        <template #footer>
-          <button class="button is-link" @click="displayProfileAuthor = false">Cerrar</button>
-        </template>
-      </modal>
+      <profile-author-modal
+        v-if="displayProfileAuthor"
+        :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
+        :is-loading="isLoading"
+        :is-error="isError"
+        @close="displayProfileAuthor = false"
+      />
     </div>
   </section>
 </template>
@@ -119,11 +106,10 @@
   import { useItemsResumeWithAuthors } from '@/composables/useItemsResumeWithAuthors'
   import { useAuthorProfile } from '@/composables/useAuthorProfile'
   import { useItemsCategories } from '@/composables/useItemsCategories'
-  import { faFile, faTimes, faUserSlash } from '@fortawesome/free-solid-svg-icons'
-  import modal from '@/components/common/modal.vue'
+  import { faFile, faUserSlash } from '@fortawesome/free-solid-svg-icons'
   /**Partials and parts */
-  import autorSemblanza from '@/components/partials/autorSemblanza.vue'
   import CategoriesFacet from './CategoriesFacet.vue'
+  import ProfileAuthorModal from './ProfileAuthorModal.vue'
   import router from '@/router'
 
   const props = defineProps({
