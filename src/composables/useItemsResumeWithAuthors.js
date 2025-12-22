@@ -9,6 +9,13 @@ export function useItemsResumeWithAuthors() {
   const isError = ref(false);
   const itemsWithAuthors = ref([]);
 
+  function cleanState() {
+    itemsWithAuthors.value = [];
+    isLoading.value = false;
+    isError.value = false;
+    simpleItems.cleanState();
+  }
+
   async function fetchItemsWithAuthors() {
     isLoading.value = true;
     try {
@@ -55,6 +62,6 @@ export function useItemsResumeWithAuthors() {
     itemsWithAuthors,
     fetchItemsWithAuthors,
     searchOptions: simpleItems.searchOptions,
-    cleanItemsState: simpleItems.cleanState,
+    cleanState,
   };
 }

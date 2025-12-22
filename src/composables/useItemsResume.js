@@ -13,9 +13,11 @@ export function useSimpleItems() {
     isLoading.value = false
     isError.value = false
     searchOptions.value = {}
+    triggerRef(items)
+    triggerRef(searchOptions)
   }
 
-  async function fetchItems(itemId) {
+  async function fetchItems() {
     isLoading.value = true
     isError.value = false
 

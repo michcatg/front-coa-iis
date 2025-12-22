@@ -55,6 +55,7 @@
     }
   })
 
+  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors, searchOptions, cleanState } = useItemsResumeWithAuthors()
   const useItemsCategoriesInstance = useItemsCategories()
   const categoriesSelected = ref([])
 
@@ -68,38 +69,44 @@
     }
     categoriesSelected.value = [...useItemsCategoriesInstance.categories.value]
     triggerRef(useItemsCategoriesInstance.categories);
-  })
 
-  watch(
+    watch(
     () => useItemsCategoriesInstance.categories.value,
     (newValue) => {
       if (newValue.length > 0) {
         useItemsCategoriesInstance.fetchItems();
+        console.log('Categories selected:', newValue);
       }else {
-        searchOptions.value.ids = undefined
+        console.log('No categories selected, clearing item IDs filter.');
+        delete searchOptions.value.ids
         fetchItemsWithAuthors()
       }
-  });
+    });
 
-  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors, searchOptions, cleanItemsState } = useItemsResumeWithAuthors()
-
-  watch (
-    () => useItemsCategoriesInstance.items.value,
-    (newItems) => {
-      if (newItems) {
-        if(newItems.length > 0) {
-          searchOptions.value.ids = newItems.map(item => item.source.replace(/^\/items\//, ''))
-          fetchItemsWithAuthors()
-        } else {
-          cleanItemsState()
+    watch (
+      () => useItemsCategoriesInstance.items.value,
+      (newItems) => {
+        console.log('New items from categories:', newItems)
+        if (newItems) {
+          if(newItems.length > 0) {
+            searchOptions.value.ids = newItems.map(item => item.source.replace(/^\/items\//, ''))
+            fetchItemsWithAuthors()
+            console.log('Search options updated:', searchOptions.value)
+          } else if (useItemsCategoriesInstance.categories.value.length === 0) {
+            if (searchOptions.value.ids) delete searchOptions.value.ids
+          } else {
+            cleanState()
+            searchOptions.value.ids = [-1]
+          }
         }
       }
-    }
-  )
+    )
+  })
   
   const displayProfileAuthor = ref(false)
   const selectedAuthor = ref(null)
 
+  /** Permite recuperar el perfil del autor en caso de que no se haya cargado */
   async function processSemblanzaAuthor(author){
     if (!author.useAuthorProfile) {
       author.useAuthorProfile = useAuthorProfile(author);
