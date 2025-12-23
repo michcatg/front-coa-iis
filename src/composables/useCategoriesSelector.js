@@ -15,10 +15,12 @@ export function useCategoriesSelector() {
 
   const setIdsCategoriesSelected = (ids) => {
     idsCategoriesSelected.value = ids
+    triggerRef(idsCategoriesSelected)
     recalculateCategoriesSelected()
   }
   const clearIdsCategoriesSelected = () => {
     idsCategoriesSelected.value = []
+    triggerRef(idsCategoriesSelected)
     recalculateCategoriesSelected()
   }
 
@@ -31,6 +33,7 @@ export function useCategoriesSelector() {
       temp.splice(index, 1)
     }
     idsCategoriesSelected.value = [...temp]
+    triggerRef(idsCategoriesSelected)
     recalculateCategoriesSelected()
   }
 
@@ -45,7 +48,6 @@ export function useCategoriesSelector() {
       )
       triggerRef(categories)
     }
-    triggerRef(idsCategoriesSelected)
   }
 
   return {

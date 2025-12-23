@@ -1,10 +1,14 @@
 <template>
   <section class="section container">
-    <search-form @search="executeAdvancedSearch" />
+    <search-form
+      :initial-fulltext-search="searchOptions.fulltext_search"
+      :initial-property="searchOptions.property"
+      @search="executeAdvancedSearch"
+    />
     <div class="columns">
       <!-- Aside de facets -->
       <aside class="column is-2" aria-label="Filtros">
-        <CategoriesFacet @update:model-value="processFacet" v-model="categoriesSelected" />
+        <CategoriesFacet @update:model-value="processFacet" :initial-value="useItemsCategoriesInstance.categories.value" />
       </aside>
       <main class="column">
         <header>
@@ -16,7 +20,7 @@
             <p>Se muestran {{ itemsWithAuthors.length }} items.</p>
           </div>
           <div class="column is-half has-text-right">
-            <button class="button is-link is-light" @click="fetchItemsWithAuthors">
+            <button class="button is-link is-light" @click="fetchItems">
               Refrescar
             </button>
           </div>
@@ -39,11 +43,12 @@
   </section>
 </template>
 <script setup>
-  import { ref, watch, onMounted, triggerRef } from 'vue'
+  import { ref, watch, onBeforeMount, onMounted, triggerRef, computed } from 'vue'
   import router from '@/router'
   import { useItemsResumeWithAuthors } from '@/composables/useItemsResumeWithAuthors'
   import { useAuthorProfile } from '@/composables/useAuthorProfile'
   import { useItemsCategories } from '@/composables/useItemsCategories'
+  import { fromQueryParams } from '@/application/helpers/exploreSearchparamsHelper'
   /**Partials and parts */
   import CategoriesFacet from './CategoriesFacet.vue'
   import ItemsList from './ItemsList.vue'
@@ -53,15 +58,29 @@
   const props = defineProps({
     categories: {
       type: [Array, String],
-      default: null
+      default: []
+    },
+    initialFulltextSearch: {
+      type: String,
+      default: ''
+    },
+    initialProperty: {
+      type: Array,
+      default: () => []
     }
   })
 
-  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors, searchOptions, cleanState } = useItemsResumeWithAuthors()
+  const { isLoading, isError, itemsWithAuthors, fetchItemsWithAuthors, searchOptions, cleanState, cleanSomeSearchOptions } = useItemsResumeWithAuthors()
   const useItemsCategoriesInstance = useItemsCategories()
-  const categoriesSelected = ref([])
 
-  onMounted(() => {
+  function fetchItems(){
+    if (!useItemsCategoriesInstance.hasSelectedDataNoItemsResults()) { // Si tiene facets que no devolvieron resultados
+      cleanState()
+      fetchItemsWithAuthors()
+    }
+  }
+
+  onBeforeMount(() => {
     if(props.categories !== null) {
       useItemsCategoriesInstance.setCategories(
         typeof props.categories === 'string'
@@ -69,12 +88,26 @@
           : props.categories
       );
     }
-    categoriesSelected.value = [...useItemsCategoriesInstance.categories.value]
+    searchOptions.value.fulltext_search = props.initialFulltextSearch
+    searchOptions.value.property = props.initialProperty
+  })
+
+  onMounted(async () => {
+    if (useItemsCategoriesInstance.categories.value.length > 0) await useItemsCategoriesInstance.fetchItems();
+    if (useItemsCategoriesInstance.items.value?.length > 0) {
+      searchOptions.value.ids = useItemsCategoriesInstance.items.value.map(item => item.source.replace(/^\/items\//, ''))
+    }
+    fetchItems()
 
     watch(
     () => useItemsCategoriesInstance.categories.value,
     (newValue) => {
-      processCategoriesChanges(newValue)
+      if (newValue.length > 0) {
+        useItemsCategoriesInstance.fetchItems();
+      } else {
+        searchOptions.value.ids = []
+        fetchItems()
+      }
     });
 
     watch (
@@ -83,27 +116,15 @@
         if (newItems) {
           if(newItems.length > 0) {
             searchOptions.value.ids = newItems.map(item => item.source.replace(/^\/items\//, ''))
-            fetchItemsWithAuthors()
-          } else if (useItemsCategoriesInstance.categories.value.length === 0) {
-            if (searchOptions.value.ids) delete searchOptions.value.ids
-          } else {
+            fetchItems()
+          } else{
             cleanState()
-            searchOptions.value.ids = [-1]
+            searchOptions.value.ids = []
           }
         }
       }
     )
-    processCategoriesChanges(useItemsCategoriesInstance.categories.value)
   })
-
-  function processCategoriesChanges(categories){
-    if (categories.length > 0) {
-      useItemsCategoriesInstance.fetchItems();
-    } else {
-      if (searchOptions.value.ids) delete searchOptions.value.ids
-      fetchItemsWithAuthors()
-    }
-  }
 
   /** Inicio perfil-autor-process */
   const displayProfileAuthor = ref(false)
@@ -119,18 +140,29 @@
   }
   /** FIN  perfil-autor-process */
 
+  /** Permite procesar la selección de categorías */
   function processFacet(newValue) {
-    router.push({ name: 'items', query: { categories: newValue } })
     useItemsCategoriesInstance.categories.value = [...newValue]
     triggerRef(useItemsCategoriesInstance.categories)
+    refreshRouteWithParams()
   }
 
   function executeAdvancedSearch(fullQuery){
-    console.log(fullQuery)
     if (!fullQuery) return;
     cleanState()
-    searchOptions.value.fullQuery = fullQuery
-    fetchItemsWithAuthors()
+    searchOptions.value = { ...searchOptions.value, ...fullQuery }
+    fetchItems()
+    refreshRouteWithParams()
+  }
+
+  function refreshRouteWithParams() {
+    router.push({
+      name: 'items',
+      query: fromQueryParams({
+        categories: useItemsCategoriesInstance.categories.value,
+        ...searchOptions.value
+      })
+    })
   }
 </script>
 <style lang="scss" scoped>

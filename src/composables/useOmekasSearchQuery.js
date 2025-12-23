@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { OmekasSearchQueryDto } from '@/application/dtos/OmekasSearchQueryDto.js'
-import { cleanValueQuery, getFullQuery } from '@/application/helpers/omekasQueryHelper.js'
+import { cleanValueQuery, getFullQuery as getFullQueryOmekas } from '@/application/helpers/omekasQueryHelper.js'
 
 export function useOmekasSearchQuery() {
   const fullText = ref('')
@@ -10,7 +10,7 @@ export function useOmekasSearchQuery() {
     addSearchQuery({ term: '', operand: '', value: '', logicConnector: '' })
   }
 
-  const addSearchQuery = (query) => {
+  const addSearchQuery = (query, isUnique = true) => {
     searchQuery.value.push(
       cleanValueQuery(
         new OmekasSearchQueryDto({
@@ -19,7 +19,7 @@ export function useOmekasSearchQuery() {
           value: query.value,
           logicConnector: query.logicConnector
         }),
-        searchQuery.value.length === 1
+        isUnique
       )
     )
   }
@@ -33,16 +33,43 @@ export function useOmekasSearchQuery() {
     searchQuery.value = []
   }
 
+  // TODO: Borrar porque creo que no es necesario
+  const initSearchParams = (params) => {
+    if (params.fullText && typeof params.fullText === 'string') {
+      fullText.value = params.fullText
+    }
+    /*if (params.property && Array.isArray(params.property)) {
+      searchQuery.value = cleanValueQuery(
+        params.property.map(prop => new OmekasSearchQueryDto({
+          term: prop.property || '',
+          operand: prop.type || '',
+          value: prop.text || '',
+          logicConnector: prop.joiner || ''
+        })),
+        true
+      )
+    }*/
+  }
+
+  const getFullQuery = () => {
+    const fullQuery = getFullQueryOmekas({
+      fullText: fullText.value,
+      searchQuery: searchQuery.value
+    })
+    return {
+      fulltext_search: fullQuery.fulltext_search || '',
+      property: fullQuery.property || []
+    };
+  }
+
   return {
+    initSearchParams,
     fullText,
     searchQuery,
     addEmptySearchQuery,
     addSearchQuery,
     deleteSearchQuery,
-    getFullQuery: () => getFullQuery({
-      fullText: fullText.value,
-      searchQuery: searchQuery.value
-    }),
+    getFullQuery,
     cleanQuery
   };
 }

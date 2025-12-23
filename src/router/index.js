@@ -7,7 +7,26 @@ const router = createRouter({
       path: '/items/',
       name: 'items',
       component: () => import('../views/ExploreItems/ExploreItems.vue'),
-      props: route => ({ categories: route.query.categories }),
+      props: route => {
+        const parseNestedParams = (query, key) => {
+          const result = [];
+          Object.keys(query).forEach(param => {
+            const match = param.match(new RegExp(`^${key}\\[(\\d+)\\]\\[(\\w+)\\]$`));
+            if (match) {
+              const index = parseInt(match[1], 10);
+              const field = match[2];
+              result[index] = result[index] || {};
+              result[index][field] = query[param];
+            }
+          });
+          return result;
+        };
+        return {
+          categories: route.query.categories,
+          initialFulltextSearch: route.query.fullText,
+          initialProperty: parseNestedParams(route.query, 'property'),
+        };
+      },
     },
     {
       path: '/categories/',

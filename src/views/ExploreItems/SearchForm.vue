@@ -2,7 +2,6 @@
   <section aria-label="Búsqueda avanzada de items">
     <h2 class="title is-5 mb-3">Búsqueda avanzada</h2>
     <form @submit.prevent="emit('search', getFullQuery())">
-      <!--{{ resourceTemplatesRecovered }}-->
       <div class="field mb-2">
         <label for="full-text-advanced" class="label mb-2">Buscar por texto completo</label>
         <div class="control">
@@ -23,32 +22,32 @@
           class="control columns is-gap-2"
         >
           <div class="column is-2" v-if="searchQuery.length > 1">
-            <select-sercheable
+            <select-searchable
               labelFor="value-search"
               :options="[{ value: 'and', text: 'Y' }, { value: 'or', text: 'O' }]"
               keyValue="value"
               keyText="text"
               placeholder="Conector lógico"
-              @update:modelValue="(value) => query.logicConnector = value"
+              v-model="query.logicConnector"
             />
           </div>
-          <div class="column">
-            <select-sercheable
+          <div class="column"  v-if="properties?.length > 0">
+            <select-searchable
               labelFor="value-search"
               :options="properties"
               keyValue="id"
               keyText="name"
               placeholder="Selecciona una propiedad"
-              @update:modelValue="(value) => query.term = value"
+              v-model="query.term"
             />
           </div>
           <div class="column">
-            <select-sercheable
+            <select-searchable
               :options="searchOperators"
               keyText="text"
               keyValue="value"
               placeholder="Seleccione un operador"
-              @update:modelValue="(value) => query.operand = value"
+              v-model="query.operand"
             />
           </div>
           <div
@@ -99,7 +98,7 @@
           </button>
         </div>
         <div class="control">
-          <button class="button is-primary is-light" type="reset" aria-label="Limpiar búsqueda" @click="cleanFullQuery">
+          <button class="button is-primary is-light" type="reset" aria-label="Limpiar búsqueda" @click.prevent="cleanFullQuery">
             <span class="icon" aria-hidden="true">
               <font-awesome-icon :icon="['fas', 'trash']" />
             </span>
@@ -115,7 +114,8 @@
   import { useResourceTemplatesCategories } from '@/composables/useResourceTemplatesCategories.js'
   import { useProperties } from '@/composables/useProperties.js'
   import { useOmekasSearchQuery as useSearchQuery } from '@/composables/useOmekasSearchQuery.js'
-  import { SelectSercheable } from 'vue-ui-kit'
+  import { searchToOmekasSearchQueryDto } from '@/application/adapters/sorucesQueryAdapter.js'
+  import { SelectSercheable as SelectSearchable } from 'vue-ui-kit'
   import 'vue-ui-kit/dist/vue-ui-kit.css';
   import { searchOperators } from '@/application/constants/omekasSearchOperations';
 
@@ -125,6 +125,14 @@
 
   const props = defineProps({
     categories: {
+      type: Array,
+      default: () => []
+    },
+    initialFulltextSearch: {
+      type: String,
+      default: ''
+    },
+    initialProperty: {
       type: Array,
       default: () => []
     }
@@ -158,6 +166,7 @@
   } = useSearchQuery()
 
   onMounted(() => {
+    /*
     if(props.categories !== null && props.categories.length > 0) {
       setCategories(props.categories)
       fetchResourceTemplates();
@@ -182,14 +191,39 @@
       }
     )
     addEmptySearchQuery()
+    */
   })
 
+  watch(
+    () => props.initialFulltextSearch,
+    (newVal) => {
+      if(!newVal) return;
+      fullText.value = newVal
+    }, { immediate: true }
+  )
+
+  watch(
+    () => props.initialProperty,
+    (newVal) => {
+      searchQuery.value = []
+      if(!newVal || newVal.length === 0) {
+        addEmptySearchQuery()
+        return;
+      }
+      const isUnique = newVal.length === 1;
+      newVal.forEach((val) => {
+        addSearchQuery(searchToOmekasSearchQueryDto(val), isUnique);
+      });
+    },
+    { immediate: true, deep: true }
+  )
+  /*
   watch( resourcesTemplates, (newVal) => {
     if(newVal === null || newVal.length === 0) return;
     const diff = newVal.filter(val => !resourceTemplatesRecovered.value.includes(val));
     resourceTemplatesRecovered.value = [...resourceTemplatesRecovered.value, ...diff];
   }, { immediate: true })
-
+  */
   function cleanFullQuery() {
     cleanQuery()
     addEmptySearchQuery()

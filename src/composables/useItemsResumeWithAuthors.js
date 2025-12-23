@@ -63,5 +63,7 @@ export function useItemsResumeWithAuthors() {
     fetchItemsWithAuthors,
     searchOptions: simpleItems.searchOptions,
     cleanState,
+    cleanSearchOption: simpleItems.cleanSearchOption,
+    cleanSomeSearchOptions: simpleItems.cleanSomeSearchOptions,
   };
 }

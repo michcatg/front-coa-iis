@@ -29,7 +29,7 @@ export function getFullQuery({ fullText, searchQuery }) {
     fullText = fullText.trim();
   }
   let queryParts = {};
-  
+
   if (fullText) {
     queryParts.fulltext_search = fullText.trim();
   }
@@ -47,4 +47,34 @@ export function getValueQuery(query) {
     type: query.operand,
     ...(query.value ? { text: query.value } : {})
   }
+}
+
+export function transformSearchOptionsToUrlParams(searchOptions) {
+  const params = {};
+/*
+  // Agregar las categorias como un solo string separado por comas
+  if (searchOptions.categories && searchOptions.categories.length > 0) {
+    params.categories = searchOptions.categories.join(',');
+  }
+*/
+  // Agregar el fulltext_search si existe
+  if (searchOptions.fullQuery.fulltext_search) {
+    params.fulltext_search = searchOptions.fullQuery.fulltext_search;
+  }
+
+  // Agregar las propiedades (property array)
+  if (searchOptions.fullQuery.property && searchOptions.fullQuery.property.length > 0) {
+    searchOptions.fullQuery.property.forEach((prop, index) => {
+      Object.keys(prop).forEach(key => {
+        params[`property[${index}][${key}]`] = prop[key];
+      });
+    });
+  }
+
+  // Agregar parámetros adicionales
+  params.sort_by = 'added';
+  params.sort_order = 'desc';
+  params.per_page = '5';
+
+  return params;
 }

@@ -27,15 +27,18 @@
   </section>
 </template>
 <script setup>
-  import { watch,defineModel, defineEmits } from 'vue';
+  import { ref, watch, defineEmits, onMounted, onBeforeMount } from 'vue';
   import { useCategoriesSelector } from '@/composables/useCategoriesSelector';
   import { faTrash } from '@fortawesome/free-solid-svg-icons'
   const emits = defineEmits(['update:modelValue']);
 
-  const model = defineModel({
-    type: Array,
-    default: () => []
+  const props = defineProps({
+    initialValue: {
+      type: Array,
+      default: () => []
+    }
   });
+
   const { 
     isLoading,
     isError,
@@ -46,23 +49,21 @@
     categories,
     idsCategoriesSelected
   } = useCategoriesSelector();
-  fetchCategories(); 
 
-  watch(
-    model,
-    (newValue) => {
-      if (newValue.length !== idsCategoriesSelected.value.length || newValue.some((id, i) => id !== idsCategoriesSelected.value[i])) {
-        setIdsCategoriesSelected(newValue);
+  onBeforeMount(() => {
+    setIdsCategoriesSelected(props.initialValue);
+  });
+  onMounted(() => {
+    fetchCategories();
+    watch(
+      idsCategoriesSelected,
+      (newValue) => {
+        if(newValue){
+          emits('update:modelValue', newValue);
+        }
       }
-    },
-    { immediate: true }
-  );
-  watch(idsCategoriesSelected,
-    (newValue) => {
-      model.value = [...newValue];
-    }
-    , { immediate: true }
-  );
+    );
+  });
 </script>
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/title";

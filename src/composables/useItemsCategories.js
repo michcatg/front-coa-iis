@@ -47,6 +47,13 @@ export function useItemsCategories() {
     triggerRef(categories);
   }
 
+  /**
+   * Función que indica si se han seleccionado categorías pero no hay resultados
+   */
+  function hasSelectedDataNoItemsResults() {
+    return categories.value.length > 0 && items.value.length === 0;
+  }
+
   return {
     isLoading,
     isError,
@@ -56,5 +63,6 @@ export function useItemsCategories() {
     addCategory,
     removeCategory,
     setCategories,
+    hasSelectedDataNoItemsResults,
   }
 }
