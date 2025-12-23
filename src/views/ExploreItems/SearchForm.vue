@@ -111,17 +111,17 @@
 </template>
 <script setup>
   import { ref, onMounted, defineEmits, watch } from 'vue'
-  import { useResourceTemplatesCategories } from '@/composables/useResourceTemplatesCategories.js'
+  //import { useResourceTemplatesCategories } from '@/composables/useResourceTemplatesCategories.js'
   import { useProperties } from '@/composables/useProperties.js'
   import { useOmekasSearchQuery as useSearchQuery } from '@/composables/useOmekasSearchQuery.js'
-  import { searchToOmekasSearchQueryDto } from '@/application/adapters/sorucesQueryAdapter.js'
+  import { searchPropertyToSearchQueryDto } from '@/application/adapters/sorucesQueryAdapter.js'
   import { SelectSercheable as SelectSearchable } from 'vue-ui-kit'
   import 'vue-ui-kit/dist/vue-ui-kit.css';
   import { searchOperators } from '@/application/constants/omekasSearchOperations';
 
   const emit = defineEmits(['search'])
-  const resourceTemplatesRecovered = ref([])
-  let categoriesSelected = []
+  //const resourceTemplatesRecovered = ref([])
+  //let categoriesSelected = []
 
   const props = defineProps({
     categories: {
@@ -137,7 +137,7 @@
       default: () => []
     }
   })
-  
+/*
   const {
     isLoading: isLoadingTemplates,
     isError: isErrorTemplates,
@@ -146,7 +146,7 @@
     addCategory,
     setCategories,
   } = useResourceTemplatesCategories()
-
+*/
   const {
     isLoading: isLoadingProperties,
     isError: isErrorProperties,
@@ -210,9 +210,8 @@
         addEmptySearchQuery()
         return;
       }
-      const isUnique = newVal.length === 1;
       newVal.forEach((val) => {
-        addSearchQuery(searchToOmekasSearchQueryDto(val), isUnique);
+        addSearchQuery(searchPropertyToSearchQueryDto(val), newVal.length === 1);
       });
     },
     { immediate: true, deep: true }

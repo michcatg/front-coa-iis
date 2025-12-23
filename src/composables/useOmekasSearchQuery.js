@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { OmekasSearchQueryDto } from '@/application/dtos/OmekasSearchQueryDto.js'
+import { PropertySearchQueryDto } from '@/application/dtos/PropertySearchQueryDto.js'
 import { cleanValueQuery, getFullQuery as getFullQueryOmekas } from '@/application/helpers/omekasQueryHelper.js'
 
 export function useOmekasSearchQuery() {
@@ -13,12 +13,7 @@ export function useOmekasSearchQuery() {
   const addSearchQuery = (query, isUnique = true) => {
     searchQuery.value.push(
       cleanValueQuery(
-        new OmekasSearchQueryDto({
-          term: query.term,
-          operand: query.operand,
-          value: query.value,
-          logicConnector: query.logicConnector
-        }),
+        new PropertySearchQueryDto(query),
         isUnique
       )
     )
@@ -33,24 +28,6 @@ export function useOmekasSearchQuery() {
     searchQuery.value = []
   }
 
-  // TODO: Borrar porque creo que no es necesario
-  const initSearchParams = (params) => {
-    if (params.fullText && typeof params.fullText === 'string') {
-      fullText.value = params.fullText
-    }
-    /*if (params.property && Array.isArray(params.property)) {
-      searchQuery.value = cleanValueQuery(
-        params.property.map(prop => new OmekasSearchQueryDto({
-          term: prop.property || '',
-          operand: prop.type || '',
-          value: prop.text || '',
-          logicConnector: prop.joiner || ''
-        })),
-        true
-      )
-    }*/
-  }
-
   const getFullQuery = () => {
     const fullQuery = getFullQueryOmekas({
       fullText: fullText.value,
@@ -63,7 +40,6 @@ export function useOmekasSearchQuery() {
   }
 
   return {
-    initSearchParams,
     fullText,
     searchQuery,
     addEmptySearchQuery,

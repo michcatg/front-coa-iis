@@ -11,6 +11,20 @@ export function getOmekaBase() {
   return OMEKAS_URL
 }
 
+
+/**
+ * Obtiene los elementos recientes de Omekas.
+ *
+ * @async
+ * @function
+ * @param {Object|null} [queryOptions=null] - Opciones de consulta para filtrar los resultados.
+ * @param {number} [limit=5] - Número máximo de elementos a obtener.
+ * @returns {Promise<Object>} - Una promesa que resuelve con los datos de los elementos recientes.
+ *
+ * @example
+ * const items = await getRecentOmekaItems({ fulltext_search: 'example' }, 10);
+ * console.log(items);
+ */
 export async function getRecentOmekaItems(queryOptions=null,limit = 5) {
   return http.get(`${getOmekaBase()}/items`, {
     params: {
@@ -23,9 +37,22 @@ export async function getRecentOmekaItems(queryOptions=null,limit = 5) {
 }
 
 /**
- * Helper para procesar los query options y transformarlos en los parámetros que Omekas espera para la búsqueda
- * @param {*} queryOptions de tipo OmekasQueryParamsDto
- * @returns un objeto con los parámetros para la búsqueda en Omekas
+ * Procesa las opciones de consulta y las transforma en los parámetros esperados por Omekas.
+ *
+ * @function
+ * @param {Object} queryOptions - Opciones de consulta para la búsqueda.
+ * @param {Array<number|string>} [queryOptions.ids] - IDs de los elementos a buscar.
+ * @param {string} [queryOptions.fulltext_search] - Texto completo para buscar en los elementos.
+ * @param {Array<Object>} [queryOptions.property] - Propiedades específicas para filtrar los resultados.
+ * @returns {Object} - Un objeto con los parámetros transformados para Omeka.
+ *
+ * @example
+ * const params = processOmekasQueryOptions({
+ *   ids: [1, 2, 3],
+ *   fulltext_search: 'example',
+ *   property: [{ joiner: 'and', property: 2, type: 'in', text: 'example' }],
+ * });
+ * console.log(params);
  */
 function processOmekasQueryOptions(queryOptions) {
   const params = {}
@@ -41,6 +68,17 @@ function processOmekasQueryOptions(queryOptions) {
   return params
 }
 
+/**
+ * Obtiene las propiedades disponibles en Omekas.
+ *
+ * @async
+ * @function
+ * @returns {Promise<Object>} - Una promesa que resuelve con las propiedades disponibles en Omeka.
+ *
+ * @example
+ * const properties = await getOmekasProperties();
+ * console.log(properties);
+ */
 export async function getOmekasProperties() {
   return http.get(`${getOmekaBase()}/properties`)
 }
