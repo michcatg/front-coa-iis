@@ -11,10 +11,20 @@
       >
         <article class="columns">
           <figure class="column">
-            <img :src="item.thumbnailSource" :alt="item.title" />
+            <a :href="router.resolve({ name: 'itemDetail', params: { id: item.id } }).href">
+              <img :src="item.thumbnailSource" :alt="item.title" />
+            </a>
+            <button
+              class="button is-link is-light"
+              @click="() => router.push({ name: 'itemDetail', params: { id: item.id } })"
+              aria-label="Ver detalle del item {{ item.title }}"
+              role="link"
+            >
+              Ver detalle
+            </button>
           </figure>
           <div class="column is-10">
-            <h3 class="mb-2"><strong>{{ item.title }}</strong></h3>
+            <h3 class="mb-2"><strong class="has-text-primary">{{ item.title }}</strong></h3>
             <time :datetime="item.createdAt" class="has-text-grey">
               <small>{{ item.createdAt }}</small>
             </time>
@@ -75,6 +85,8 @@
   import { defineEmits } from 'vue'
   import { faFile, faUserSlash } from '@fortawesome/free-solid-svg-icons'
   import moreLowText from '@/components/basicFormats/moreLowText.vue'
+  import router from '@/router'
+
   const props = defineProps({
     items: {
       type: Array,

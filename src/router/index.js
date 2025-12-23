@@ -29,6 +29,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/items/:id(\\d+)',
+      name: 'itemDetail',
+      component: () => import('../views/ItemDetail.vue'),
+      props: route => ({
+        id: parseInt(route.params.id, 10),
+      }),
+    },
+    {
       path: '/categories/',
       name: 'categories',
       component: () => import('../views/ExploreCategories.vue'),
