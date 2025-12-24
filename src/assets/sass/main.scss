@@ -7,8 +7,9 @@
 */
 // Import and/or override Bulma variables at modules level
 @forward '@fortawesome/fontawesome-svg-core/styles.css';
+@use "@/assets/sass/_variables" as *;
 @use "bulma/sass/utilities" with(
-  $primary: #A8084D,
+  $primary: $primary,
 );
 // #F4F4F9 ghost white
 // #FCF7FF magnolia
