@@ -1,6 +1,6 @@
 <template>
   <section aria-label="Filtros de categorías">
-    <h2 class="title is-5 mb-3">Categorías</h2>
+    <h2 class="title is-5 mb-3 has-background-primary p-3 has-text-white">Categorías</h2>
     <p v-if="isError">Error al cargar las categorías.</p>
     <button
       v-if="idsCategoriesSelected.length > 0"

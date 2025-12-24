@@ -1,6 +1,6 @@
 <template>
-  <section aria-label="Búsqueda avanzada de items">
-    <h2 class="title is-5 mb-3">Búsqueda avanzada</h2>
+  <section class="box" aria-label="Búsqueda avanzada de items">
+    <h2 class="title is-5 mb-3 p-3 ">Búsqueda avanzada</h2>
     <form @submit.prevent="emit('search', getFullQuery())">
       <div class="field mb-2">
         <label for="full-text-advanced" class="label mb-2">Buscar por texto completo</label>
@@ -234,6 +234,7 @@
   @forward 'vue-ui-kit/dist/vue-ui-kit.css';
   @forward "bulma/sass/form";
   @forward "bulma/sass/elements/button";
+  @forward "bulma/sass/elements/box";
   @forward "bulma/sass/layout/section";
   @forward "bulma/sass/elements/title";
   .is-fullwidth {
