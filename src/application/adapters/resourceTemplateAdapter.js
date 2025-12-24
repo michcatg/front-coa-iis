@@ -1,4 +1,4 @@
-import { ResourceTemplateStrapiDto } from "@/application/dtos/ResourceTemplateStrapiDto";
+//import { ResourceTemplateStrapiDto } from "@/application/dtos/ResourceTemplateStrapiDto";
 // TODO: Descomentar para la mejora del advanced search form que depende de los templates
 /**
  * Convierte los datos de la API en un objeto `MediaImageDto`.
@@ -27,3 +27,19 @@ export function toResourceTemplateStrapiDto(apiData) {
   });
 }
 */
+
+export function omekasResourceTemplateLabelToString(apiData) {
+  return apiData['o:label'];
+}
+
+import {omekasResourceTemplatePropertyToResourceTemplatePropertyDto } from "@/application/adapters/resourceTemplatePropertyAdapter.js";
+import { ResourceTemplateDto } from "../dtos/ResourceTemplateDto";
+export function omekasResourceTemplateToResourceTemplateDto(apiData) {
+  return new ResourceTemplateDto({
+    id: apiData["o:id"],
+    label: apiData["o:label"],
+    properties: apiData['o:resource_template_property'] ? apiData['o:resource_template_property'].map(
+      property => omekasResourceTemplatePropertyToResourceTemplatePropertyDto(property)
+    ) : [],
+  });
+}

@@ -1,5 +1,7 @@
 import { ItemResumeDto } from "@/application/dtos/ItemResumeDto";
 import { ItemStrapiDto } from "@/application/dtos/ItemStrapiDto";
+import { BookDetailDto } from '@/application/dtos/itemDetail/BookDetailDto';
+import { PaperDetailDto } from '@/application/dtos/itemDetail/PaperDetailDto';
 
 /**
  * Convierte los datos de la API de Omekas en un objeto `ItemResumeDto`.
@@ -57,4 +59,26 @@ export function toItemStrapiDto(apiData) {
     id: apiData.documentId,
     source: apiData.source,
   });
+}
+
+
+import { OmekasItemDetailDto } from '@/application/dtos/OmekasItemDetailDto.js';
+import { omekasDataToOmekasPropertyValueDto } from '@/application/adapters/omekasPropertyValueAdapter.js';
+export function omekasDataToItemDetailDto(apiData) {
+  const propertiesValues = Object.keys(apiData)
+    .filter(key => key.startsWith('dcterms:') || key.startsWith('bibo:'))
+    .map(key => {
+      return apiData[key].map(valueData => omekasDataToOmekasPropertyValueDto(valueData));
+    });
+
+  return new OmekasItemDetailDto({
+    id: apiData["o:id"],
+    source: apiData["@id"],
+    thumbnailSource: apiData["thumbnail_display_urls"] ? apiData["thumbnail_display_urls"]["medium"] : undefined,
+    propertiesValues: propertiesValues,
+  });
+}
+
+export function omekasResourceTemplateItemIdToInt(apiData) {
+  return apiData["o:resource_template"]?.["o:id"] || null;
 }
