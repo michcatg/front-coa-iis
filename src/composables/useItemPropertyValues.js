@@ -13,11 +13,8 @@ export function useItemPropertyValues({
         // SI hay resource template, se mapea con sus labels
         if (resourceTemplate.value) {
             resourceTemplate.value.properties.forEach((property) => {
-                console.log('Mapping property:', property);
                 const values = getPropertyValuesForPropertyWithId(property.id);
                 if (values.length) {
-                    console.log('values found for property:', property);
-                    console.log('values:', values);
                     mappedValues.push({
                         propertyId: property.id,
                         propertyLabel: property.label || values[0].propertyLabel,
@@ -53,7 +50,6 @@ export function useItemPropertyValues({
         }, {});
 
         Object.values(groupedValues).forEach((group) => {
-            console.log('Grouped property values:', group);
             if (group.values.length) {
                 mappedValues.push(group);
             }

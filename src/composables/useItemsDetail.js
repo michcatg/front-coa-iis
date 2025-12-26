@@ -46,7 +46,6 @@ export function useItemsDetail(settings={}) {
     }
     try {
       const response = await getResourceTemplateApi(resourceTemplateId)
-      console.log('Resource template response:', response);
       resourceTemplate.value = omekasResourceTemplateToResourceTemplateDto(response.data)
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
