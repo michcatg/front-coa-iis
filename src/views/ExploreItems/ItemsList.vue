@@ -24,7 +24,7 @@
                 <a :href="router.resolve({ name: 'itemDetail', params: { id: item.id } }).href">
                   <img :src="item.thumbnailSource" :alt="item.title" />
                 </a>
-                <button
+                <a
                   v-if="isListView"
                   class="button is-link is-light"
                   @click="() => router.push({ name: 'itemDetail', params: { id: item.id } })"
@@ -32,7 +32,7 @@
                   role="link"
                 >
                   Ver detalle
-                </button>
+                </a>
             </figure>
             <div class="column is-10">
               <h3 class="mb-2"><strong class="has-text-primary">{{ item.title }}</strong></h3>
