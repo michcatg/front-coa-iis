@@ -92,12 +92,12 @@
   </div>
 </template>
 <script setup>
-  import { ref, defineProps, computed, watch } from 'vue';
+  import { defineProps, computed, watch } from 'vue';
   import { useItemsDetail } from '@/composables/useItemsDetail';
   import { useItemPropertyValues } from '@/composables/useItemPropertyValues.js';
   import { useAuthorItem } from "@/composables/useAuthorItem";
   import { useOmekasMedias } from '@/composables/useOmekasMedias';
-  import { useAuthorProfile } from '@/composables/useAuthorProfile';
+  import { useAuthorProfileTriggerDisplay } from '@/composables/useAuthorProfileTriggerDisplay';
   import { getFileTypeWithMediaType } from '@/application/helpers/simplifyFIleTypeHelper';
   import { faFilePdf, faFileImage, faFileAlt } from '@fortawesome/free-solid-svg-icons';
   import { isAuthorPropertyValue } from '@/utils/format/itemHelpers.js';
@@ -119,18 +119,9 @@
   authorsItemInstance.fetchAuthors();
   /* FIN Recuperación de autores relacionados con el ítem */
 
-  /** Inicio perfil-autor-process */
-  const displayProfileAuthor = ref(false)
-  const selectedAuthor = ref(null)
-  async function processSemblanzaAuthor(author){
-    if (!author.useAuthorProfile) {
-      author.useAuthorProfile = useAuthorProfile(author);
-      author.useAuthorProfile.fetchSemblanzaAuthor();
-    }
-    selectedAuthor.value =  author
-    displayProfileAuthor.value = true
-  }
-  /** FIN  perfil-autor-process */
+  /* INICIO Manejo de modal de perfil de autor */
+  const { displayProfileAuthor, selectedAuthor, processSemblanzaAuthor } = useAuthorProfileTriggerDisplay();
+  /* FIN Manejo de modal de perfil de autor */
 
   const { itemDetail, resourceTemplate, isLoading, isError, fetch } = useItemsDetail({
     id: props.id
@@ -166,6 +157,7 @@
     });
   });
 
+  /** Inicio manejo de medias */
   const omekasMediasInstance = useOmekasMedias();
   watch(itemDetail, (newItemDetail) => {
     if (newItemDetail && newItemDetail.mediaSources) {

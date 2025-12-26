@@ -69,7 +69,7 @@
   import router from '@/router'
   import { faList, faThLarge } from '@fortawesome/free-solid-svg-icons'
   import { useItemsResumeWithAuthors } from '@/composables/useItemsResumeWithAuthors'
-  import { useAuthorProfile } from '@/composables/useAuthorProfile'
+  import { useAuthorProfileTriggerDisplay } from '@/composables/useAuthorProfileTriggerDisplay';
   import { useItemsCategories } from '@/composables/useItemsCategories'
   import { fromQueryParams } from '@/application/helpers/exploreSearchparamsHelper'
   /**Partials and parts */
@@ -151,19 +151,9 @@
     )
   })
 
-  /** Inicio perfil-autor-process */
-  const displayProfileAuthor = ref(false)
-  const selectedAuthor = ref(null)
-
-  async function processSemblanzaAuthor(author){
-    if (!author.useAuthorProfile) {
-      author.useAuthorProfile = useAuthorProfile(author);
-      author.useAuthorProfile.fetchSemblanzaAuthor();
-    }
-    selectedAuthor.value =  author
-    displayProfileAuthor.value = true
-  }
-  /** FIN  perfil-autor-process */
+  /* INICIO Manejo de modal de perfil de autor */
+  const { displayProfileAuthor, selectedAuthor, processSemblanzaAuthor } = useAuthorProfileTriggerDisplay();
+  /* FIN Manejo de modal de perfil de autor */
 
   /** Permite procesar la selección de categorías */
   function processFacet(newValue) {
