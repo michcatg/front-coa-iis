@@ -8,6 +8,7 @@
     </div>
 
     <div v-else>
+       <!-- TODO: Manejar de forma adecuada estados de error y carga -->
       <div v-if="isLoading" class="has-text-centered">Cargando...</div>
       <div v-else-if="isError" class="notification is-danger is-light has-text-centered">
         Error al cargar los items.
@@ -22,7 +23,6 @@
           <div class="columns is-centered">
             <template v-for="media in omekasMediasInstance.medias.value" :key="media.id">
               <div v-if="media.isPublic" class="column is-narrow">
-                <!-- TODO: Mostrar información técnica y título del media -->
                 <figure class="image is-128x128 is-flex is-flex-direction-column is-align-items-center media-figure">
                   <a :href="media.url" target="_blank" rel="noopener">
                     <img :src="media.thumbnailUrls.large" :alt="media.alternativeText" class="is-rounded" />

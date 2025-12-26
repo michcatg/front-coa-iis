@@ -45,6 +45,7 @@
             </button>
           </div>
         </div>
+        <!-- TODO: Manejar de forma correcta los estados de error y carga -->
         <items-list
           :items="itemsWithAuthors"
           :is-loading="isLoading"
