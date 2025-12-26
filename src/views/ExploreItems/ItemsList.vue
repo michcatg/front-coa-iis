@@ -134,6 +134,7 @@
   @forward "bulma/sass/elements/button";
   @forward "bulma/sass/elements/tag";
   @forward "bulma/sass/elements/box";
+  @forward "@/assets/sass/hoverScale.scss";
 
   .catalogo-items {
     list-style: none;
@@ -149,14 +150,5 @@
     height: auto;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .hover-scale {
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Suaviza el efecto */
-  }
-
-  .hover-scale:hover {
-    transform: scale(1.05); /* Aumenta el tamaño al 105% */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Agrega una sombra para el realce */
   }
 </style>

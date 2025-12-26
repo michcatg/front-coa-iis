@@ -17,7 +17,7 @@
           Mostrando detalles para el ítem con ID: {{ id }}
         </p>
         </p>-->
-        <div class="box mt-5">
+        <div class="box mt-5 hover-scale">
           <h2 class="title is-4">Ficheros</h2>
           <div class="columns is-centered">
             <template v-for="media in omekasMediasInstance.medias.value" :key="media.id">
@@ -45,7 +45,7 @@
             </template>
           </div>
         </div>
-        <div class="box">
+        <div class="box hover-scale">
           <h2 class="title is-4">Descripción</h2>
           <!-- TODO: Usar el useAutorProfile para mostrar información del autor -->
           <dl v-if="itemPropertyValuesMapped.length" class="content">
@@ -125,6 +125,7 @@
 @forward "bulma/sass/elements/box";
 @forward "bulma/sass/elements/notification";
 @forward "bulma/sass/elements/button";
+@forward "@/assets/sass/hoverScale.scss";
 @use "@/assets/sass/_variables" as *;
 
 .title {
@@ -211,4 +212,7 @@ dl {
   }
 }
 /** Fin para superponer el icono de archivo */
+.hover-scale:hover {
+  margin-top: 60px;
+}
 </style>
