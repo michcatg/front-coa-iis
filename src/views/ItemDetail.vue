@@ -23,9 +23,12 @@
             <template v-for="media in omekasMediasInstance.medias.value" :key="media.id">
               <div v-if="media.isPublic" class="column is-narrow">
                 <!-- TODO: Mostrar información técnica y título del media -->
-                <figure class="image is-128x128 is-flex is-flex-direction-column is-align-items-center">
+                <figure class="image is-128x128 is-flex is-flex-direction-column is-align-items-center media-figure">
                   <a :href="media.url" target="_blank" rel="noopener">
                     <img :src="media.thumbnailUrls.large" :alt="media.alternativeText" class="is-rounded" />
+                    <span :class="['icon-overlay', getFileTypeWithMediaType(media.mime)]">
+                      <font-awesome-icon :icon="getIconForFileType(media.mime)" />
+                    </span>
                   </a>
                   <a
                     class="button is-link is-light mt-3"
@@ -35,7 +38,7 @@
                     :aria-label="'Ver media ' + media.title"
                     role="link"
                   >
-                    Visualizar
+                    Visualizar <br>{{ media.alternateText || media.title }}
                   </a>
                 </figure>
               </div>
@@ -65,14 +68,6 @@
         </div>
       </div>
     </div>
-    <pre class="mt-5">
-      Item Detail:
-      {{ itemDetail }}
-    </pre>
-    <pre>
-      mapeados:
-      {{ itemPropertyValuesMapped }}
-    </pre>
   </div>
 </template>
 <script setup>
@@ -80,6 +75,8 @@
   import { useItemsDetail } from '@/composables/useItemsDetail';
   import { useItemPropertyValues } from '@/composables/useItemPropertyValues.js';
   import { useOmekasMedias } from '@/composables/useOmekasMedias';
+  import { getFileTypeWithMediaType } from '@/application/helpers/simplifyFIleTypeHelper';
+  import { faFilePdf, faFileImage, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 
   const props = defineProps({
     id: {
@@ -112,6 +109,16 @@
       omekasMediasInstance.fetchMultiple(newItemDetail.mediaSources);
     }
   });
+  function getIconForFileType(mimeType) {
+    const fileType = getFileTypeWithMediaType(mimeType);
+    if (fileType === 'image') {
+      return faFileImage;
+    } else if (fileType === 'pdf') {
+      return faFilePdf;
+    } else {
+      return faFileAlt; // Icono genérico para otros tipos de archivo
+    }
+  }
 </script>
 <style lang="scss" scoped>
 @forward "bulma/sass/elements/title";
@@ -174,4 +181,34 @@ dl {
     height: 16px;
   }
 }
+
+/** Inicio para superponer el icono de archivo */
+.media-figure {
+  position: relative; /* Necesario para posicionar el ícono */
+  display: inline-block;
+
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-overlay {
+    position: absolute;
+    top: -0.5rem; /* Ajusta la distancia desde la parte superior */
+    right: -0.5rem; /* Ajusta la distancia desde la derecha */
+    font-size: 2.5rem; /* Tamaño del ícono */
+    background: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+    border-radius: 2px; /* Hace el fondo circular */
+    padding: 0.3rem; /* Espaciado interno */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+  }
+  .icon-overlay.pdf {
+    color: #ff3860; /* Color primario de Bulma para PDF */
+  }
+  .icon-overlay.image {
+    color: #23d160; /* Color verde de Bulma para imágenes */
+  }
+}
+/** Fin para superponer el icono de archivo */
 </style>
