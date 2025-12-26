@@ -30,3 +30,21 @@ export function toMediaImageDto(apiData) {
     height: apiData.height || 0
   });
 }
+
+import { OmekasMediaDto } from '@/application/dtos/OmekasMediaDto.js';
+export function omekasDataToItemMediaDto(apiData) {
+  return new OmekasMediaDto({
+    id: apiData["o:id"],
+    url: apiData["o:original_url"],
+    mime: apiData["o:media_type"],
+    size: apiData["o:size"],
+    title: apiData["o:title"] || '',
+    alternativeText: apiData["o:alt_text"] || '',
+    isPublic: apiData["o:is_public"] || false,
+    thumbnailUrls: {
+      square: apiData["o:thumbnail_urls"]["square"] || '',
+      medium: apiData["o:thumbnail_urls"]["medium"] || '',
+      large: apiData["o:thumbnail_urls"]["large"] || ''
+    }
+  });
+}

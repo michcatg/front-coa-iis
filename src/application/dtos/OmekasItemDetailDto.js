@@ -6,10 +6,11 @@
  * @class
  */
 export class OmekasItemDetailDto {
-  constructor({ id, source, thumbnailSource, propertiesValues }) {
+  constructor({ id, source, thumbnailSource, mediaSources, propertiesValues }) {
     this.id = id;
     this.source = source;
     this.thumbnailSource = thumbnailSource;
+    this.mediaSources = mediaSources; // Array de URLs de medios asociados al ítem
     this.propertiesValues = propertiesValues; // Array de OmekasPropertyValueDto
   }
 }

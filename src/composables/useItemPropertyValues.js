@@ -1,4 +1,4 @@
-import { ref,computed } from 'vue';
+import { computed } from 'vue';
 export function useItemPropertyValues({
     refPropertyValues,
     refResourceTemplate
@@ -6,8 +6,7 @@ export function useItemPropertyValues({
     const propertyValues = refPropertyValues;
     const resourceTemplate = refResourceTemplate;
 
-    const otro = ref('hola');
-
+    // TODO: Limpiar que no se dupliquen los property values porque entran en los no agrupados
     const mappedPropertyValues = computed(() => {
         if (!propertyValues.value || propertyValues.value.length === 0) return [];
         const mappedValues = [];

@@ -75,6 +75,7 @@ export function omekasDataToItemDetailDto(apiData) {
     id: apiData["o:id"],
     source: apiData["@id"],
     thumbnailSource: apiData["thumbnail_display_urls"] ? apiData["thumbnail_display_urls"]["medium"] : undefined,
+    mediaSources: apiData["o:media"] ? apiData["o:media"].map(media => media["@id"]) : [],
     propertiesValues: propertiesValues,
   });
 }

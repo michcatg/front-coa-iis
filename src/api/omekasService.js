@@ -89,3 +89,7 @@ function processOmekasQueryOptions(queryOptions) {
 export async function getOmekasProperties() {
   return http.get(`${getOmekaBase()}/properties`)
 }
+
+export async function getOmekasMediaFromSource(source) {
+  return http.get(source)
+}

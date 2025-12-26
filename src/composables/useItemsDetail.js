@@ -1,4 +1,4 @@
-import { ref, shallowRef, triggerRef, computed } from "vue";
+import { ref, shallowRef, triggerRef } from "vue";
 import { getOmekaItem as getItemDetailApi, getOmekasResourceTemplate as getResourceTemplateApi } from '@/api/omekasService.js'
 import { omekasDataToItemDetailDto, omekasResourceTemplateItemIdToInt } from "@/application/adapters/itemAdapter.js";
 import {omekasResourceTemplateToResourceTemplateDto} from "@/application/adapters/resourceTemplateAdapter.js";

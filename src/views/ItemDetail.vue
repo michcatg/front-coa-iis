@@ -1,58 +1,71 @@
 <template>
-  <div class="container">
-    <h1 class="title is-3 has-text-centered mb-5">Detalle del Ítem</h1>
+  <div class="container mt-5">
+    <h1 class="title is-3 mb-2">Detalle del Item</h1>
+    <hr class="mb-3 mt-0">
 
     <div v-if="!id" class="notification is-warning is-light has-text-centered">
-      <p>ID de ítem no proporcionado.</p>
+      <p>ID de Item no proporcionado.</p>
     </div>
 
     <div v-else>
-      <div v-if="isLoading">Cargando...</div>
-      <div v-else-if="isError">Error al cargar los items.</div>
+      <div v-if="isLoading" class="has-text-centered">Cargando...</div>
+      <div v-else-if="isError" class="notification is-danger is-light has-text-centered">
+        Error al cargar los items.
+      </div>
       <div class="content" v-else>
-        <p class="notification is-info">
+        <!--<p class="notification is-info">
           Mostrando detalles para el ítem con ID: {{ id }}
         </p>
-        <figure
-          v-if="itemDetail"
-          class="is-flex is-flex-direction-column is-align-items-center column is-2">
-            <!-- TODO: Recuperar el media para que se  pueda visualizar el item-->
-            <a :href="itemDetail.source" target="_blank" rel="noopener">
-              <img :src="itemDetail.thumbnailSource" alt="Miniatura del ítem" />
-            </a>
-            <button
-              class="button is-link is-light"
-              @click="() => router.push({ name: 'itemDetail', params: { id: item.id } })"
-              aria-label="Ver detalle del item {{ item.title }}"
-              role="link"
-            >
-              Ver detalle
-            </button>
-        </figure>
-        <dl v-if="itemPropertyValuesMapped.length">
-          <template v-for="itemProperty in itemPropertyValuesMapped">
-            <dt>
-              {{ itemProperty.propertyLabel }}
-            </dt>
-            <dd>
-              <ul
-                v-if="itemProperty.values && itemProperty.values.length > 1"
-              >
-                <li v-for="value in itemProperty.values" :key="value">
-                  {{ value?.value }}
-                </li>
-              </ul>
-              <span
-                v-else
-              >
-                {{ itemProperty.values[0].value }}
-              </span>
-            </dd>
-          </template>
-        </dl>
+        </p>-->
+        <div class="box mt-5">
+          <h2 class="title is-4">Ficheros</h2>
+          <div class="columns is-centered">
+            <template v-for="media in omekasMediasInstance.medias.value" :key="media.id">
+              <div v-if="media.isPublic" class="column is-narrow">
+                <!-- TODO: Mostrar información técnica y título del media -->
+                <figure class="image is-128x128 is-flex is-flex-direction-column is-align-items-center">
+                  <a :href="media.url" target="_blank" rel="noopener">
+                    <img :src="media.thumbnailUrls.large" :alt="media.alternativeText" class="is-rounded" />
+                  </a>
+                  <a
+                    class="button is-link is-light mt-3"
+                    :href="media.url"
+                    target="_blank"
+                    rel="noopener"
+                    :aria-label="'Ver media ' + media.title"
+                    role="link"
+                  >
+                    Visualizar
+                  </a>
+                </figure>
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="box">
+          <h2 class="title is-4">Descripción</h2>
+          <!-- TODO: Usar el useAutorProfile para mostrar información del autor -->
+          <dl v-if="itemPropertyValuesMapped.length" class="content">
+            <template v-for="itemProperty in itemPropertyValuesMapped">
+                <dt class="">
+                {{ itemProperty.propertyLabel }}
+                </dt>
+              <dd>
+                <ul v-if="itemProperty.values && itemProperty.values.length > 1">
+                  <li v-for="value in itemProperty.values" :key="value">
+                    {{ value?.value }}
+                  </li>
+                </ul>
+                <span v-else>
+                  {{ itemProperty.values[0].value }}
+                </span>
+              </dd>
+            </template>
+          </dl>
+        </div>
       </div>
     </div>
-    <pre>
+    <pre class="mt-5">
       Item Detail:
       {{ itemDetail }}
     </pre>
@@ -63,9 +76,10 @@
   </div>
 </template>
 <script setup>
-  import { defineProps, computed } from 'vue';
+  import { defineProps, computed, watch } from 'vue';
   import { useItemsDetail } from '@/composables/useItemsDetail';
   import { useItemPropertyValues } from '@/composables/useItemPropertyValues.js';
+  import { useOmekasMedias } from '@/composables/useOmekasMedias';
 
   const props = defineProps({
     id: {
@@ -92,8 +106,72 @@
     return itemPropertyValues.mappedPropertyValues.value || [];
   });
 
+  const omekasMediasInstance = useOmekasMedias();
+  watch(itemDetail, (newItemDetail) => {
+    if (newItemDetail && newItemDetail.mediaSources) {
+      omekasMediasInstance.fetchMultiple(newItemDetail.mediaSources);
+    }
+  });
 </script>
 <style lang="scss" scoped>
 @forward "bulma/sass/elements/title";
+@forward "bulma/sass/elements/box";
+@forward "bulma/sass/elements/notification";
 @forward "bulma/sass/elements/button";
+@use "@/assets/sass/_variables" as *;
+
+.title {
+  color: #333;
+}
+
+figure {
+  max-width: 200px;
+  margin: 0 auto 20px;
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+dl {
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 10px;
+  }
+
+  dt {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+  }
+  dd {
+    margin: 0;
+    color: #333;
+    overflow-wrap: break-word;
+
+    ul {
+      list-style: disc;
+      padding-left: 1rem;
+
+      li {
+        &::marker {
+          color: $primary; /* Usa la variable de Bulma para el color primario */
+        }
+      }
+    }
+  }
+}
+
+.button {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
 </style>
