@@ -50,7 +50,7 @@ export function useItemPropertyValues({
                 };
             }
             if (pv[0].value !== undefined) {
-                acc[pv[0].propertyId].values.push(pv[0]);
+                acc[pv[0].propertyId].values = pv;
             }
             return acc;
         }, {});
