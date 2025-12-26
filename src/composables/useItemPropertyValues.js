@@ -39,18 +39,15 @@ export function useItemPropertyValues({
     function getPropertyValuesForPropertyWithoutTemplate(propertyValuesArray){
         const mappedValues = [];
         const groupedValues = propertyValuesArray.reduce((acc, pv) => {
-            console.log('Grouping property value:', pv);
-            console.log('Current accumulator:', acc);
-            if (!acc[pv[0].propertyId]) {
-                console.log('Creating new group for propertyId:', pv[0].propertyId);
+            if (!acc[pv[0].propertyId] && !resourceTemplate.value?.properties.some(prop => prop.id === pv[0].propertyId)) {
                 acc[pv[0].propertyId] = {
                     propertyId: pv[0].propertyId,
                     propertyLabel: pv[0].propertyLabel,
                     values: []
                 };
-            }
-            if (pv[0].value !== undefined) {
-                acc[pv[0].propertyId].values = pv;
+                if (pv[0].value !== undefined) {
+                    acc[pv[0].propertyId].values = pv;
+                }
             }
             return acc;
         }, {});
