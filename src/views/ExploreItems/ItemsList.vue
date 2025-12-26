@@ -66,20 +66,10 @@
                 <template v-else>
                   <ul>
                     <li v-for="author in item.authors" :key="author.id">
-                      <template v-if="typeof author === 'string'">
-                        {{ author }}
-                        <small class="tag is-info is-light is-rounded" aria-label="Sin semblanza" title="Sin semblanza" role="status">Sin semblanza</small>
-                      </template>
-                      <template v-else>
-                        {{ author.nombreCompleto }}
-                        <button
-                          class="has-text-link"
-                          @click="emit('view-author', author)"
-                          role="button"
-                        >
-                          <font-awesome-icon :icon="faFile" /> Ver semblanza
-                      </button>
-                      </template>
+                      <autor-possible-semblanza
+                        :author="author"
+                        @view-author="emit('view-author', $event)"
+                      />
                     </li>
                   </ul>
                   <p
@@ -104,9 +94,12 @@
 </template>
 <script setup>
   import { defineEmits, computed } from 'vue'
-  import { faFile, faUserSlash } from '@fortawesome/free-solid-svg-icons'
+  import { faUserSlash } from '@fortawesome/free-solid-svg-icons'
   import moreLowText from '@/components/basicFormats/moreLowText.vue'
   import router from '@/router'
+
+  /** Partials and parts */
+  import AutorPossibleSemblanza from '@/components/partials/autorPosibleSemblanza.vue'
 
   const props = defineProps({
     items: {
