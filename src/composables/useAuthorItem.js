@@ -14,7 +14,8 @@ export function useAuthorItem(item) {
     isError.value = false
 
     try {
-      const response = await getAuthorsForItemSource(item.source.replace(itemSourceURL(), ''))
+      // TODO: manejar caso de item como objeto o id de una mejor forma
+      const response = await getAuthorsForItemSource(item.source?.replace(itemSourceURL(), '') || `/items/${item}`)
       const authorsArray = response.data?.data?.[0]?.autores.map(authorDto => {
         const dto = toAutorItemDto(authorDto)
         return {

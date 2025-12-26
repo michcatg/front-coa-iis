@@ -56,11 +56,25 @@
               <dd>
                 <ul v-if="itemProperty.values && itemProperty.values.length > 1">
                   <li v-for="value in itemProperty.values" :key="value">
-                    {{ value?.value }}
+                    <autor-possible-semblanza
+                      v-if="value?.value && isAuthorPropertyValue(itemProperty)"
+                      :author="value.value"
+                      @view-author="processSemblanzaAuthor"
+                    />
+                    <template v-else>
+                      {{ value.value }}
+                    </template>
                   </li>
                 </ul>
                 <span v-else>
-                  {{ itemProperty.values[0].value }}
+                  <autor-possible-semblanza
+                    v-if="itemProperty.values[0]?.value && isAuthorPropertyValue(itemProperty)"
+                    :author="itemProperty.values[0].value"
+                    @view-author="processSemblanzaAuthor"
+                  />
+                  <template v-else>
+                    {{ itemProperty.values[0].value }}
+                  </template>
                 </span>
               </dd>
             </template>
@@ -68,15 +82,30 @@
         </div>
       </div>
     </div>
+    <profile-author-modal
+      v-if="displayProfileAuthor"
+      :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
+      :is-loading="isLoading"
+      :is-error="isError"
+      @close="displayProfileAuthor = false"
+    />
   </div>
 </template>
 <script setup>
-  import { defineProps, computed, watch } from 'vue';
+  import { ref, defineProps, computed, watch } from 'vue';
   import { useItemsDetail } from '@/composables/useItemsDetail';
   import { useItemPropertyValues } from '@/composables/useItemPropertyValues.js';
+  import { useAuthorItem } from "@/composables/useAuthorItem";
   import { useOmekasMedias } from '@/composables/useOmekasMedias';
+  import { useAuthorProfile } from '@/composables/useAuthorProfile';
   import { getFileTypeWithMediaType } from '@/application/helpers/simplifyFIleTypeHelper';
   import { faFilePdf, faFileImage, faFileAlt } from '@fortawesome/free-solid-svg-icons';
+  import { isAuthorPropertyValue } from '@/utils/format/itemHelpers.js';
+  import { compareStrings } from "@/utils/stringHelpers";
+
+  /** Partials and parts */
+  import ProfileAuthorModal from '@/views/ExploreItems/ProfileAuthorModal.vue';
+  import AutorPossibleSemblanza from '@/components/partials/autorPosibleSemblanza.vue'
 
   const props = defineProps({
     id: {
@@ -84,6 +113,24 @@
       required: true
     }
   });
+
+  /* INICIO Recuperación de autores relacionados con el ítem */
+  const authorsItemInstance = useAuthorItem(props.id);
+  authorsItemInstance.fetchAuthors();
+  /* FIN Recuperación de autores relacionados con el ítem */
+
+  /** Inicio perfil-autor-process */
+  const displayProfileAuthor = ref(false)
+  const selectedAuthor = ref(null)
+  async function processSemblanzaAuthor(author){
+    if (!author.useAuthorProfile) {
+      author.useAuthorProfile = useAuthorProfile(author);
+      author.useAuthorProfile.fetchSemblanzaAuthor();
+    }
+    selectedAuthor.value =  author
+    displayProfileAuthor.value = true
+  }
+  /** FIN  perfil-autor-process */
 
   const { itemDetail, resourceTemplate, isLoading, isError, fetch } = useItemsDetail({
     id: props.id
@@ -100,7 +147,23 @@
   });
 
   const itemPropertyValuesMapped = computed(() => {
-    return itemPropertyValues.mappedPropertyValues.value || [];
+    if (!itemPropertyValues.mappedPropertyValues?.value) return [];
+    return itemPropertyValues.mappedPropertyValues.value.map(prop => {
+      if (!isAuthorPropertyValue(prop)) return prop;
+      prop.values = [
+        ...authorsItemInstance.authors.value.map(author => ({
+          propertyId: prop.propertyId,
+          propertyLabel: prop.propertyLabel,
+          value: author,
+        })),
+        ...prop.values.filter(authorPropertyValue =>
+          !authorsItemInstance.authors.value.some(
+            author => compareStrings(authorPropertyValue.value, `${author.primerApellido} ${author.segundoApellido}, ${author.nombres}`)
+          )
+        )
+      ]
+      return prop;
+    });
   });
 
   const omekasMediasInstance = useOmekasMedias();
@@ -119,6 +182,7 @@
       return faFileAlt; // Icono genérico para otros tipos de archivo
     }
   }
+  /** Fin manejo de medias */
 </script>
 <style lang="scss" scoped>
 @forward "bulma/sass/elements/title";
