@@ -32,7 +32,7 @@ export async function getOmekasResourceTemplate(id) {
  * const items = await getRecentOmekaItems({ fulltext_search: 'example' }, 10);
  * console.log(items);
  */
-export async function getRecentOmekaItems(queryOptions=null,limit = 5) {
+export async function getRecentOmekasItems(queryOptions=null,limit = 5) {
   return http.get(`${getOmekaBase()}/items`, {
     params: {
       ...(queryOptions ? processOmekasQueryOptions(queryOptions) : {}),

@@ -3,7 +3,7 @@ import { getRecentOmekasItems as getItemsApi } from '@/api/omekasService.js'
 import { toItemResumeDto } from "@/application/adapters/itemAdapter.js";
 import { OmekasQueryParamsDto } from "@/application/dtos/OmekasQueryParamsDto.js";
 
-export function useSimpleItems() {
+export function useItemsResume() {
   const isLoading = ref(false)
   const isError = ref(false)
   const items = shallowRef(null)
