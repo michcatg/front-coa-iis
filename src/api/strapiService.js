@@ -1,7 +1,7 @@
 import http from './httpClient'
 import { STRAPI_URL } from './config'
 import { strapiAuthService } from './strapiAuth'
-import { getFilterCategories } from './strapiHelpers'
+import { getFilterCategories, getFieldsStringQueryFromArray } from './strapiHelpers'
 
 /**
  * Obtiene la URL base para las solicitudes a Strapi.
@@ -100,5 +100,15 @@ export async function getResourceTemplatesSourceByCategories(categoryIds = null)
   const authConfig = strapiAuthService.getAuthConfig()
   const filterQuery = categoryIds && categoryIds.length > 0 ? getFilterCategories(categoryIds) : ''
   const url = `${getStrapiBase()}/template-recurso-digitals?${filterQuery}${filterQuery ? '&' : ''}fields[0]=source&populate[categorias][fields][0]=documentId`
+  return http.get(url, authConfig)
+}
+
+
+export async function getAuthorsGeneral( options = {} ) {
+  const authConfig = strapiAuthService.getAuthConfig()
+  console.log (options)
+  let fields = getFieldsStringQueryFromArray(options.fields)
+  console.log('fields: ', fields)
+  const url = `${getStrapiBase()}/autores?${fields}`
   return http.get(url, authConfig)
 }

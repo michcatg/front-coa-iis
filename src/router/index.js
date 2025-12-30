@@ -50,6 +50,11 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/admin/items/new',
+      name: 'createItems',
+      component: () => import('../views/CreateItem.vue')
+    },
+    {
       path: '/test',
       name: 'test',
       component: () => import('../views/Test.vue'),

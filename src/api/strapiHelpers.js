@@ -16,3 +16,12 @@ export function getFilterCategories(categoryIds) {
     .map((id, idx) => `filters[$or][${idx}][categoria][documentId][$eq]=${id}`)
     .join('&')
 }
+
+export function getFieldsStringQueryFromArray(fieldsArray){
+  let string = ''
+  fieldsArray.forEach((value, key) => {
+    console.log('eb ek fireach ', value, key)
+    string = `${string}${(key!=0)? '&' : ''}fields[${key}]=${value}`
+  })
+  return string
+}
