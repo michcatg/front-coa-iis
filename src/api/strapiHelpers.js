@@ -25,3 +25,17 @@ export function getFieldsStringQueryFromArray(fieldsArray){
   })
   return string
 }
+
+export function getLimitQuery( limit ) {
+  return ''
+}
+
+export function getPageQuery ( page ) {
+  return ''
+}
+
+export function getQueryStringWithOptions(options) {
+  return `${getFieldsStringQueryFromArray(options.fields)}
+    ${getLimitQuery(options.limit)}
+    ${getPageQuery(options.page)}`
+}

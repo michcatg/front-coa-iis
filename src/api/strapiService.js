@@ -1,7 +1,7 @@
 import http from './httpClient'
 import { STRAPI_URL } from './config'
 import { strapiAuthService } from './strapiAuth'
-import { getFilterCategories, getFieldsStringQueryFromArray } from './strapiHelpers'
+import { getFilterCategories, getQueryStringWithOptions } from './strapiHelpers'
 
 /**
  * Obtiene la URL base para las solicitudes a Strapi.
@@ -104,11 +104,10 @@ export async function getResourceTemplatesSourceByCategories(categoryIds = null)
 }
 
 
-export async function getAuthorsGeneral( options = {} ) {
+export async function getAuthors( options = {} ) {
   const authConfig = strapiAuthService.getAuthConfig()
   console.log (options)
-  let fields = getFieldsStringQueryFromArray(options.fields)
-  console.log('fields: ', fields)
-  const url = `${getStrapiBase()}/autores?${fields}`
+  let stringOptions = getQueryStringWithOptions(options)
+  const url = `${getStrapiBase()}/autores?${stringOptions}`
   return http.get(url, authConfig)
 }
