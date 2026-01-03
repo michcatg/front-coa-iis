@@ -12,7 +12,7 @@ export function useCategories() {
     isError.value = false
 
     try {
-      const response = await getCategories()
+      const response = await getCategories({ withImagen: true })
       categories.value = response.data.data.map(toCategoryResumeDto)
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {

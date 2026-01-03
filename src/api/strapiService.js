@@ -60,8 +60,17 @@ export async function getSemblanzaAuthor(documentId){
  * const categories = await getCategories();
  * console.log(categories);
  */
-export async function getCategories(){
+export async function getCategories(options = {}){
   const authConfig = strapiAuthService.getAuthConfig()
+  if (options.withImagen) {
+    authConfig.params = {
+      populate: {
+        imagen: {
+          fields: ['url', 'mime', 'width', 'height', 'alternativeText', 'caption']
+        }
+      }
+    }
+  }
   return http.get(`${getStrapiBase()}/categorias`, authConfig)
 }
 

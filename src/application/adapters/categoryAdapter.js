@@ -1,5 +1,7 @@
 import { CategoryResumeDto } from "@/application/dtos/CategoryResumeDto";
 import { CategorySelectedDto } from "@/application/dtos/CategorySelectedDto";
+import { MediaImageDto } from '@/application/dtos/MediaImageDto';
+import { toMediaImageDto } from "./mediaAdapter";
 
 /**
  * Convierte los datos de la API de Strapi en un objeto `CategoryResumeDto`.
@@ -21,7 +23,9 @@ export function toCategoryResumeDto(apiData) {
     name: apiData.nombre,
     slug: apiData.slug,
     // TODO: Manejar el thumbnailSource
-    thumbnailSource: "https://bulma.io/assets/images/placeholders/1280x960.png",
+    thumbnailSource: apiData.imagen ?
+      toMediaImageDto(apiData.imagen) :
+      new MediaImageDto({ id: null, url: null, mime: null, width: null, height: null, alternativeText: null, caption: null }),
   });
 }
 

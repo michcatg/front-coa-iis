@@ -18,7 +18,7 @@
         v-for="category in categories" :key="category.name"
       >
         <Card
-          :imgSrc="category.thumbnailSource || 'https://bulma.io/assets/images/placeholders/1280x960.png'"
+          :imgSrc="category.thumbnailSource.url || 'https://bulma.io/assets/images/placeholders/1280x960.png'"
           :alt="category.name"
         >
           <router-link
