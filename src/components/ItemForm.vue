@@ -27,10 +27,16 @@
             <label for="archivo">Archivo:</label>
             <input id="archivo" name="archivo" type="file" @change="handleFileChange" />
         </div>
-        <div>
-            <button type="submit">
-                Crear Recurso
-            </button>
+        <div class="field is-grouped">
+            <div class="control">
+                <button
+                    type="submit"
+                    class="button is-primary"
+                    role="button"
+                >
+                    Crear Recurso
+                </button>
+            </div>
         </div>
         <div v-if="createItem.state.isLoading">Enviando...</div>
         <div v-if="createItem.state.isError" style="color: red;">Error: {{ createItem.state.isError }}</div>
@@ -75,3 +81,7 @@
     
 
 </script>
+<style lang="scss" scoped>
+  @forward "bulma/sass/elements/button";
+  @forward "bulma/sass/form";
+</style>
