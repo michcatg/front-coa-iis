@@ -129,3 +129,20 @@ export async function getAuthors( options = {} ) {
   const url = `${getStrapiBase()}/autores?${stringOptions}`
   return http.get(url, authConfig)
 }
+
+export async function createRecursoDigitalCompleto(data, file) {
+  const authConfig = strapiAuthService.getAuthConfig()
+
+  const formData = new FormData()
+  formData.append('archivo', file)
+  formData.append('data', JSON.stringify(data))
+
+  const url = `${getStrapiBase()}/recursos-digitales/crear-completo`
+  return http.post(url, formData, {
+    ...authConfig,
+    headers: {
+      ...authConfig.headers,
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
