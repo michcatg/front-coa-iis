@@ -26,10 +26,11 @@
  * // }
  */
 export class CategoryResumeDto { 
-  constructor({ id, name, slug, thumbnailSource }) {
+  constructor({ id, name, slug, thumbnailSource, resourceTemplateSource }) {
     this.id = id;
     this.name = name;
     this.slug = slug;
     this.thumbnailSource = thumbnailSource;
+    this.resourceTemplateSource = resourceTemplateSource;
   }
 }

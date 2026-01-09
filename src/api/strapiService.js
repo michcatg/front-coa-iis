@@ -62,16 +62,25 @@ export async function getSemblanzaAuthor(documentId){
  */
 export async function getCategories(options = {}){
   const authConfig = strapiAuthService.getAuthConfig()
+  const withResourceTemplate = {
+    populate: {
+      template_recursos_digitales: {
+        fields: ['documentId', 'id', 'source']
+      }
+    }
+  }
   if (options.withImagen) {
     authConfig.params = {
       populate: {
+        ...withResourceTemplate.populate,
         imagen: {
           fields: ['url', 'mime', 'width', 'height', 'alternativeText', 'caption']
         }
       }
     }
   }
-  return http.get(`${getStrapiBase()}/categorias`, authConfig)
+
+  return http.get(`${getStrapiBase()}/categorias`, { ...authConfig, ...withResourceTemplate })
 }
 
 /**

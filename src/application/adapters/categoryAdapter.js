@@ -26,6 +26,9 @@ export function toCategoryResumeDto(apiData) {
     thumbnailSource: apiData.imagen ?
       toMediaImageDto(apiData.imagen) :
       new MediaImageDto({ id: null, url: null, mime: null, width: null, height: null, alternativeText: null, caption: null }),
+    resourceTemplateSource: apiData.template_recursos_digitales && apiData.template_recursos_digitales.length > 0 ?
+        apiData.template_recursos_digitales[0].source :
+        null,
   });
 }
 
