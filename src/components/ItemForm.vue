@@ -20,8 +20,7 @@
     </form>
 </template>
 <script setup>
-    import { reactive, ref, toRaw } from 'vue'
-    import { createRecursoDigitalCompleto } from '@/api/strapiService'
+    import { reactive, ref } from 'vue'
     import { useCreateItem } from '@/composables/useCreateItem'
     const createItem = useCreateItem()
 
