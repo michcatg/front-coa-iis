@@ -1,6 +1,7 @@
 import { ref, shallowRef } from "vue"
 import { getAuthors } from '@/api/strapiService'
-import { AutorGeneralDto } from '@/application/dtos/AutorGeneralDto'
+import { autorStrapitoAutorGeneralesDto } from '@/application/adapters/autorAdapter'
+import { AutorGeneralesDto } from '@/application/dtos/AutorGeneralesDto'
 import { toSnakeCase } from '@/utils/stringHelpers'
 
 export function useAuthorsGeneralesQuery(options={
@@ -19,12 +20,13 @@ export function useAuthorsGeneralesQuery(options={
     try {
       const response = await getAuthors({
         fields: Object.keys(
-          new AutorGeneralDto({})
+          new AutorGeneralesDto({})
         ).map(toSnakeCase),
-        limit: 10,
         ...finalOptions
       })
-      authors.value = response.data
+      // TODO: Ver porque falla el map
+      console.log(response.data)
+      authors.value = response.data.data.map(autorStrapitoAutorGeneralesDto)
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error)

@@ -1,6 +1,7 @@
 import { Autor } from '@/domain/entities/Autor'
 import { AutorProfileDto } from '@/application/dtos/AutorProfileDto'
 import { AutorItemDto } from '@/application/dtos/AutorItemDto'
+import { AutorGeneralesDto } from '@/application/dtos/AutorGeneralesDto'
 import { MediaImageDto } from '@/application/dtos/MediaImageDto'
 import { toMediaImageDto } from '@/application/adapters/mediaAdapter'
 
@@ -93,4 +94,15 @@ export function autorItemDtoToEntity(dto) {
     primerApellido: dto.primerApellido,
     segundoApellido: dto.segundoApellido,
   });
+}
+
+export function autorStrapitoAutorGeneralesDto (apiData) {
+  return new AutorGeneralesDto({
+    id: apiData.id,
+    nombres: apiData.nombres,
+    primerApellido: apiData.primer_apellido,
+    segundoApellido: apiData.segundo_apellido,
+    gradoAcademico: apiData.grado_academico,
+    correoElectronico: apiData.correo_electronico,
+  })
 }

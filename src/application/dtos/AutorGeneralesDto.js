@@ -1,4 +1,4 @@
-export class AutorGeneralDto {
+export class AutorGeneralesDto {
     constructor ({id, nombres, primerApellido, segundoApellido, gradoAcademico, correoElectronico}) {
         this.id = id
         this.nombres = nombres
