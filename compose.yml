@@ -28,8 +28,6 @@ services:
       - "traefik.http.routers.${CONTAINER_NAME}-https.rule=Host(`${DEPLOY_DOMAIN}`)"
       - "traefik.http.routers.${CONTAINER_NAME}-https.entrypoints=websecure"
       - "traefik.http.routers.${CONTAINER_NAME}-https.tls=true"
-      - "traefik.http.routers.${CONTAINER_NAME}-https.tls.certresolver=letsencrypt"
-      # TODO: Fix certificate issue
 
       # Middleware para redirección HTTP -> HTTPS
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
