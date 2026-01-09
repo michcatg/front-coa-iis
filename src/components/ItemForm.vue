@@ -44,7 +44,7 @@
     </form>
 </template>
 <script setup>
-    import { reactive, ref } from 'vue'
+    import { reactive, ref, computed } from 'vue'
     import { useCreateItem } from '@/composables/useCreateItem'
     import {
         SelectSercheable as CustomSelectInput,
@@ -54,11 +54,20 @@
         /**
          * Lista de categorías disponibles para seleccionar
          * @type {Array<{id: number, name: string}>}
-         * @example [{ id: 1, name: 'Libro' }, { id: 2, name: 'Artículo' }]
+         * @example [{ id: 1, name: 'Libro', resourceTemplateSource: 1 }, { id: 2, name: 'Artículo', resourceTemplateSource: 3 }]
          */
         categories: {
             type: Array,
             required: true
+        },
+        /**
+         * Lista de plantillas de recursos disponibles
+         * @type {Array<{id: number, label: string, properties: Array<{id: number, label: string}>}>}
+         * @example [{ id: 1, label: 'Libro', properties: [...] }, { id: 2, label: 'Artículo', properties: [...] }]
+         */
+        resourceTemplates: {
+            type: Array,
+            required: true,
         }
     })
 
@@ -79,6 +88,16 @@
         archivos.value = event.target.files[0]
     }
     
+    const resourceTemplateSelected = computed(() => {
+        if (!data.categoria) {
+            return null
+        }
+        return props.resourceTemplates.find(
+            (template) => `${template.id}` === props.categories.find(
+                (category) => category.id === data.categoria
+            )?.resourceTemplateSource
+        ) || null
+    })
 
 </script>
 <style lang="scss" scoped>
