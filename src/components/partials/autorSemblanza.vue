@@ -9,7 +9,7 @@
         :aria-label="author?.image?.ariaLabel || `Imagen del autor ${author?.name}`"
       />
       <figcaption>
-        <p class=" content">{{ author?.image?.caption || `Autor: ${author?.name}` }}</p>
+        <p class=" content">{{ author?.image?.caption || `Autor: ${new AuthorEntity(author).getNombreCompleto()}` }}</p>
       </figcaption>
     </figure>
     <div class="content">
@@ -19,6 +19,7 @@
 </template>
 <script setup>
   import RichTextBlock from '@/shared/presentation/richTextBlock/index.vue'
+  import { Autor as AuthorEntity } from '@/domain/entities/Autor.js'
   const props = defineProps({
     author: {
       type: Object
