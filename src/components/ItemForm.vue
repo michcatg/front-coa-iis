@@ -49,6 +49,13 @@
                                     :key="index"
                                 >
                                     {{ autor.nombres }} {{ autor.primerApellido }} {{ autor.segundoApellido }}
+                                    <button
+                                        type="button"
+                                        class="button is-danger is-small is-outlined is-light"
+                                        @click="data.autores.splice(index, 1)"
+                                    >
+                                        Remover
+                                    </button>
                                 </li>
                             </ul>
                         </div>
