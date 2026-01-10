@@ -121,6 +121,13 @@
             }"
             @close="isAddingAutor=false"
         />
+        <action-notification-modal
+            v-if="createItem.state.isSuccess || createItem.state.isError"
+            :type="(createItem.state.isSuccess) ? 'success' : 'danger'"
+            @close="createItem.resetState()"
+        >
+            {{ createItem.state.isSuccess ? 'El recurso ha sido creado exitosamente.' : 'Ha ocurrido un error al crear el recurso: ' + createItem.state.isError }}
+        </action-notification-modal>
     </form>
 </template>
 <script setup>
@@ -134,6 +141,7 @@
     import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
     import AutorFormModal from './AutorFormModal.vue'
     import { faUpload } from '@fortawesome/free-solid-svg-icons'
+    import ActionNotificationModal from '@/shared/ActionNotificationModal.vue'
 
     const props = defineProps({
         /**

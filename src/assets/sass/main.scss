@@ -42,3 +42,8 @@ hr {
   background: linear-gradient(to right, #aa084e, #feecf4);
   border-radius: 2px;
 }
+
+.text-darkened {
+  filter: brightness(0.7);
+  font-weight: 600;
+}
