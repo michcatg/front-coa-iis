@@ -13,9 +13,27 @@ export const fieldsValidators = {
         }
     },
     archivo: (value) => {
+        const MAX_SIZE = 50 * 1024 * 1024 // 50 MB en bytes
+        const messages = []
+
+        if (!(value !== null && value !== undefined && value instanceof File && value.size > 0)) {
+            return {
+                messages: ['El archivo es obligatorio'],
+                isValid: false
+            }
+        }
+
+        if (value.size > MAX_SIZE) {
+            messages.push('El archivo no debe superar los 50 MB')
+        }
+
+        if (value.type !== 'application/pdf') {
+            messages.push('El archivo debe ser un PDF')
+        }
+
         return {
-            messages: ['El archivo es obligatorio'],
-            isValid: value !== null && value !== undefined && value instanceof File && value.size > 0
+            messages: messages,
+            isValid: messages.length === 0
         }
     },
     autores: (value) => {
