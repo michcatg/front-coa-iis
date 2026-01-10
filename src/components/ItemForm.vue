@@ -38,37 +38,11 @@
                 <div class="control">
                     <!-- INICIO autor -->
                     <template v-if="isPropertyAutor(property.id)">
-                        <button
-                            type="button"
-                            class="button is-link is-light mb-2"
-                            @click="isAddingAutor = true"
-                        >
-                            Agregar autor
-                        </button>
-                        <div v-if="data.autores?.length" class="content">
-                            <transition-group
-                                name="list"
-                                tag="ul"
-                            >
-                                <li
-                                    v-for="(autor, index) in data.autores"
-                                    :key="index"
-                                    :class="{ 'is-last-selected': index === lastAddedAutorIndex }"
-                                >
-                                    {{ autor.nombres }} {{ autor.primerApellido }} {{ autor.segundoApellido }}
-                                    <button
-                                        type="button"
-                                        class="button is-danger is-small is-outlined is-light"
-                                        @click="() => {
-                                            data.autores.splice(index, 1)
-                                            lastAddedAutorIndex = null
-                                        }"
-                                    >
-                                        Remover
-                                    </button>
-                                </li>
-                            </transition-group>
-                        </div>
+                        <autor-form-input
+                            v-model="data.autores"
+                            :last-added-autor-index="lastAddedAutorIndex"
+                            @add-autor="isAddingAutor = true"
+                        />
                         <template v-if="errors.autores">
                             <p v-for="error in errors.autores" class="help is-danger">{{ error }}</p>
                         </template>
@@ -131,6 +105,7 @@
                 </button>
             </div>
         </div>
+        <!--INICIO modals section-->
         <autor-form-modal
             v-if="isAddingAutor"
             @submit="(dataAutor) => {
@@ -161,6 +136,7 @@
                 <span class="ml-3">Enviando recurso, por favor espere...</span>
             </div>
         </action-notification-modal>
+        <!--FIN modals section-->
     </form>
 </template>
 <script setup>
@@ -176,6 +152,7 @@
     import { faUpload, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
     import ActionNotificationModal from '@/shared/ActionNotificationModal.vue'
     import { validateForm, validateField } from '@/application/helpers/validateCreateItemFormHelper'
+    import AutorFormInput from './partials/AutorFormInput.vue'
 
     const props = defineProps({
         /**
