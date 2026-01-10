@@ -1,6 +1,10 @@
 <template>
     <form @submit.prevent="handleFormSubmit">
-        <div class="field">
+        RESOURCE TEMPLATES
+        <pre>
+            {{ resourceTemplateSelected }}
+        </pre>
+        <div class="field mb-4">
             <label
                 class="label"
                 for="categoria"
@@ -18,11 +22,31 @@
                 />
             </div>
         </div>
-        <div>
-            <label for="titulo">Título:</label>
-            <input id="titulo" name="titulo" type="text" v-model="data.datosCatalogacion.title" />
-            
-        </div>
+        <!-- INICIA DATOS DE CATALOGACIÓN -->
+        <template v-if="resourceTemplateSelected">
+            <div
+                v-for="property in resourceTemplateSelected.properties"
+                :key="property.id"
+                class="field mb-4"
+            >
+                <label
+                    class="label"
+                    :for="`propiedad${property.id}`"
+                >
+                    {{ property.label }}
+                </label>
+                <div class="control">
+                    <input
+                        class="input"
+                        :id="toCamelCase(property.label)"
+                        :name="toCamelCase(property.label)"
+                        type="text"
+                        v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
+                    />
+                </div>
+            </div>
+        </template>
+        <!-- TERMINA DATOS DE CATALOGACIÓN -->
         <div>
             <label for="archivo">Archivo:</label>
             <input id="archivo" name="archivo" type="file" @change="handleFileChange" />
@@ -49,6 +73,8 @@
     import {
         SelectSercheable as CustomSelectInput,
     } from 'vue-ui-kit'
+    import { getComponentById, getInputTypeById } from '@/application/constants/propertyInputsComponents'
+    import { toCamelCase } from '@/utils/stringHelpers'
 
     const props = defineProps({
         /**
@@ -74,9 +100,8 @@
     const createItem = useCreateItem()
 
     const data = reactive({
-        datosCatalogacion: {
-            title: ''
-        },
+        datosCatalogacion: {},
+        resourceTemplate: null,
         autores: [],
         categoria: null,
     })
@@ -87,18 +112,35 @@
     const handleFileChange = (event) => {
         archivos.value = event.target.files[0]
     }
+    /*function handleUpdateInput(property) {
+        const key = toCamelCase(property.label)
+        data.datosCatalogacion[key] = 
+    }*/
     
     const resourceTemplateSelected = computed(() => {
         if (!data.categoria) {
             return null
         }
-        return props.resourceTemplates.find(
+
+        const template = props.resourceTemplates.find(
             (template) => `${template.id}` === props.categories.find(
                 (category) => category.id === data.categoria
             )?.resourceTemplateSource
         ) || null
-    })
 
+        if (template) {
+            data.datosCatalogacion = {}
+            template.properties.forEach(property => {
+                const key = toCamelCase(property.label)
+                data.datosCatalogacion[key] = {
+                    propertyId: property.id,
+                    value: ''
+                }
+            })
+        }
+        data.resourceTemplate = template ? template.id : null
+        return template
+    })
 </script>
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/button";
