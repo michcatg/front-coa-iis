@@ -46,21 +46,28 @@
                             Agregar autor
                         </button>
                         <div v-if="data.autores?.length" class="content">
-                            <ul>
+                            <transition-group
+                                name="list"
+                                tag="ul"
+                            >
                                 <li
                                     v-for="(autor, index) in data.autores"
                                     :key="index"
+                                    :class="{ 'is-last-selected': index === lastAddedAutorIndex }"
                                 >
                                     {{ autor.nombres }} {{ autor.primerApellido }} {{ autor.segundoApellido }}
                                     <button
                                         type="button"
                                         class="button is-danger is-small is-outlined is-light"
-                                        @click="data.autores.splice(index, 1)"
+                                        @click="() => {
+                                            data.autores.splice(index, 1)
+                                            lastAddedAutorIndex = null
+                                        }"
                                     >
                                         Remover
                                     </button>
                                 </li>
-                            </ul>
+                            </transition-group>
                         </div>
                         <template v-if="errors.autores">
                             <p v-for="error in errors.autores" class="help is-danger">{{ error }}</p>
@@ -134,6 +141,7 @@
                     data.autores = []
                 }
                 data.autores.push(dataAutor)
+                lastAddedAutorIndex = data.autores.length - 1
                 isAddingAutor = false
             }"
             @close="isAddingAutor=false"
@@ -182,6 +190,7 @@
         }
     })
     const isAddingAutor = ref(false)
+    const lastAddedAutorIndex = ref(null)
 
     const createItem = useCreateItem()
 
@@ -270,4 +279,55 @@
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/button";
   @forward "bulma/sass/form";
+  /* INICIO estilos para resaltar el último autor seleccionado */
+    .is-last-selected {
+        animation: highlight 1s ease-in-out;
+    }
+
+    @keyframes highlight {
+    0% {
+        background-color: #f0f8ff;
+        font-weight: bold;
+        border-left: 4px solid #3273dc;
+        padding-left: 8px;
+    }
+    100% {
+        background-color: transparent;
+        font-weight: normal;
+        border-left: none;
+        padding-left: 0;
+    }
+    }
+    /* FIN estilos para resaltar el último autor seleccionado */
+
+    /* INICIO estilos para transición de lista al remover autores */
+    // Transición cuando un elemento entra en la lista
+    .list-enter-active {
+        transition: all 0.3s ease-out;
+    }
+
+    // Transición cuando un elemento sale de la lista
+    .list-leave-active {
+        transition: all 0.3s ease-in;
+        position: absolute; // IMPORTANTE: Para que los elementos se ajusten suavemente
+        width: 100%; // IMPORTANTE: Mantener el ancho durante la animación
+    }
+
+    // Estado inicial al entrar (elemento nuevo)
+    .list-enter-from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    // Estado final al salir (elemento removido)
+    .list-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    // IMPORTANTE: Asegura que los elementos restantes se muevan suavemente
+    .list-move {
+        transition: transform 0.3s ease;
+    }
+  /* FIN estilos para transición de lista al remover autores */
 </style>
