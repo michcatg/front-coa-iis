@@ -49,34 +49,20 @@
                         </template>
                     </template>
                     <!-- FIN autor -->
-                    <!-- INICIO MULTITEXT -->
-                    <template v-else-if="propertyComponentTypes[property.id] === 'MULTITEXT'">
-                        <custom-multitext-value-input
+                    <!-- INICIO componentes dinámicos -->
+                    <template v-else-if="propertyComponentTypes[property.id] === 'MULTITEXT' || propertyComponentTypes[property.id] === 'TEXTAREA'">
+                        <component
+                            :is="propertyComponentTypes[property.id] === 'MULTITEXT' ? CustomMultitextValueInput : CustomTextareaInput"
                             v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
-                            :id="toCamelCase(property.label)"
-                            :name="toCamelCase(property.label)"
-                            :delimiters="[';',  '|']"
-                            @update:modelValue="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
-                        />
-                        <template v-if="errors[toCamelCase(property.label)]">
-                            <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
-                        </template>
-
-                    </template>
-                    <!-- FIN MULTITEXT -->
-                    <!-- INICIO TEXTAREA -->
-                    <template v-else-if="propertyComponentTypes[property.id] === 'TEXTAREA'">
-                        <custom-textarea-input
-                            v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
-                            :id="toCamelCase(property.label)"
-                            :name="toCamelCase(property.label)"
+                            :item-name="toCamelCase(property.label)"
+                            v-bind="propertyComponentTypes[property.id] === 'MULTITEXT' ? { delimiters: [';', '|'] } : {}"
                             @update:modelValue="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
                         />
                         <template v-if="errors[toCamelCase(property.label)]">
                             <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
                         </template>
                     </template>
-                    <!-- FIN TEXTAREA -->
+                    <!-- FIN componentes dinámicos -->
                     <!-- INICIO otros tipos de propiedad -->
                     <template v-else>
                         <input
@@ -88,7 +74,6 @@
                             v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
                             @input="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
                         />
-
                         <template v-if="errors[toCamelCase(property.label)]">
                             <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
                         </template>
@@ -252,11 +237,7 @@
         archivos.value = event.target.files[0]
         validateField('archivo', archivos.value, errors)
     }
-    /*function handleUpdateInput(property) {
-        const key = toCamelCase(property.label)
-        data.datosCatalogacion[key] = 
-    }*/
-    
+
     const resourceTemplateSelected = computed(() => {
         if (!data.categoria) {
             return null
