@@ -31,7 +31,7 @@
             >
                 <label
                     class="label"
-                    :for="`propiedad${property.id}`"
+                    :for="toCamelCase(property.label)"
                 >
                     {{ property.label }}
                 </label>
