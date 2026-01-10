@@ -1,0 +1,51 @@
+/* INICIO estilos para resaltar el último autor seleccionado */
+    .is-last-selected {
+        animation: highlight 1s ease-in-out;
+    }
+
+    @keyframes highlight {
+    0% {
+        background-color: #f0f8ff;
+        font-weight: bold;
+        border-left: 4px solid #3273dc;
+        padding-left: 8px;
+    }
+    100% {
+        background-color: transparent;
+        font-weight: normal;
+        border-left: none;
+        padding-left: 0;
+    }
+    }
+    /* FIN estilos para resaltar el último autor seleccionado */
+
+    /* INICIO estilos para transición de lista al remover autores */
+    // Transición cuando un elemento entra en la lista
+    .list-enter-active {
+        transition: all 0.3s ease-out;
+    }
+
+    // Transición cuando un elemento sale de la lista
+    .list-leave-active {
+        transition: all 0.3s ease-in;
+        position: absolute; // IMPORTANTE: Para que los elementos se ajusten suavemente
+        width: 100%; // IMPORTANTE: Mantener el ancho durante la animación
+    }
+
+    // Estado inicial al entrar (elemento nuevo)
+    .list-enter-from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    // Estado final al salir (elemento removido)
+    .list-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    // IMPORTANTE: Asegura que los elementos restantes se muevan suavemente
+    .list-move {
+        transition: transform 0.3s ease;
+    }
+  /* FIN estilos para transición de lista al remover autores */
