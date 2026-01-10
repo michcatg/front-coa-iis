@@ -15,8 +15,12 @@
                     key-value="id"
                     key-text="name"
                     placeholder="Seleccione una categoría"
+                    @update:modelValue="validateField('categoria', data.categoria, errors)"
                 />
             </div>
+            <template v-if="errors.categoria">
+                <p v-for="error in errors.categoria" class="help is-danger">{{ error }}</p>
+            </template>
         </div>
         <!-- INICIA DATOS DE CATALOGACIÓN -->
         <template v-if="resourceTemplateSelected">
@@ -58,17 +62,27 @@
                                 </li>
                             </ul>
                         </div>
+                        <template v-if="errors.autores">
+                            <p v-for="error in errors.autores" class="help is-danger">{{ error }}</p>
+                        </template>
                     </template>
                     <!-- FIN autor -->
                     <!-- INICIO otros tipos de propiedad -->
+                    <template v-else>
                         <input
-                            v-else
                             class="input"
+                            :class="{ 'is-danger': errors[toCamelCase(property.label)] }"
                             :id="toCamelCase(property.label)"
                             :name="toCamelCase(property.label)"
                             type="text"
                             v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
+                            @input="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
                         />
+
+                        <template v-if="errors[toCamelCase(property.label)]">
+                            <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
+                        </template>
+                    </template>
                     <!-- FIN otros tipos de propiedad -->
                 </div>
             </div>
@@ -86,14 +100,17 @@
                     <label class="file-label">
                         <input id="archivo" class="file-input" name="archivo" type="file" @change="handleFileChange" />
                         <span class="file-cta">
-                        <span class="file-icon">
-                            <font-awesome-icon :icon="faUpload" />
-                        </span>
-                        <span class="file-label"> Seleccione un archivo… </span>
+                            <span class="file-icon">
+                                <font-awesome-icon :icon="faUpload" />
+                            </span>
+                            <span class="file-label"> Seleccione un archivo… </span>
                         </span>
                         <span class="file-name"> {{ archivos ? archivos.name : '' }} </span>
-                </label>
+                    </label>
                 </div>
+                <template v-if="errors.archivo">
+                    <p v-for="error in errors.archivo" class="help is-danger">{{ error }}</p>
+                </template>
             </div>
         </div>
         <div class="field is-grouped">
@@ -142,6 +159,7 @@
     import AutorFormModal from './AutorFormModal.vue'
     import { faUpload } from '@fortawesome/free-solid-svg-icons'
     import ActionNotificationModal from '@/shared/ActionNotificationModal.vue'
+    import { validateForm, fieldsValidators, validateField } from '@/application/helpers/validateCreateItemFormHelper'
 
     const props = defineProps({
         /**
@@ -174,11 +192,38 @@
         categoria: null,
     })
     const archivos = ref([])
+    const errors = reactive({})
+
+    watch (
+        () => data.autores,
+        () => {
+            console.log('Validando autores:', data.autores)
+            validateField(
+                'autores',
+                [...data.autores],
+                errors
+            )
+        },
+        { deep: true }
+    )
     const handleFormSubmit = async () => {
+        if (!validateForm(
+            errors,
+            {
+                categoria: data.categoria,
+                titulo: data.datosCatalogacion['titulo']?.value,
+                autores: data.autores,
+                archivo: archivos.value,
+            }
+        )) {
+            return
+        }
+
         createItem.post({data: data, files: archivos.value})
     }
     const handleFileChange = (event) => {
         archivos.value = event.target.files[0]
+        validateField('archivo', archivos.value, errors)
     }
     /*function handleUpdateInput(property) {
         const key = toCamelCase(property.label)
@@ -217,6 +262,7 @@
             data.autores = []
             data.categoria = null
             archivos.value = []
+            Object.keys(errors).forEach(key => delete errors[key])
         }
     })
 
