@@ -35,13 +35,14 @@ export async function getOmekasResoruceTemplates() {
  * const items = await getRecentOmekaItems({ fulltext_search: 'example' }, 10);
  * console.log(items);
  */
+// TODO: Manejar la paginación
 export async function getRecentOmekasItems(queryOptions=null,limit = 5) {
   return http.get(`${getOmekaBase()}/items`, {
     params: {
       ...(queryOptions ? processOmekasQueryOptions(queryOptions) : {}),
       sort_by: 'added',
       sort_order: 'desc',
-      per_page: limit
+      //per_page: limit
     }
   })
 }
