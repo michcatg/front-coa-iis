@@ -49,6 +49,19 @@
                         </template>
                     </template>
                     <!-- FIN autor -->
+                     <template v-else-if="propertyComponentTypes[property.id] === 'MULTITEXT'">
+                        <custom-multitext-value-input
+                            v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
+                            :id="toCamelCase(property.label)"
+                            :name="toCamelCase(property.label)"
+                            :delimiters="[';',  '|']"
+                            @update:modelValue="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
+                        />
+                        <template v-if="errors[toCamelCase(property.label)]">
+                            <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
+                        </template>
+
+                     </template>
                     <!-- INICIO otros tipos de propiedad -->
                     <template v-else>
                         <input
@@ -133,8 +146,9 @@
     import { useCreateItem } from '@/composables/useCreateItem'
     import {
         SelectSercheable as CustomSelectInput,
+        MultitextValue as CustomMultitextValueInput,
     } from 'vue-ui-kit'
-    import { getComponentById, getInputTypeById } from '@/application/constants/propertyInputsComponents'
+    import { propertyComponentTypes } from '@/application/constants/propertyInputsComponents'
     import { toCamelCase } from '@/utils/stringHelpers'
     import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
     import { faUpload, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
