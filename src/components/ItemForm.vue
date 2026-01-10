@@ -49,7 +49,8 @@
                         </template>
                     </template>
                     <!-- FIN autor -->
-                     <template v-else-if="propertyComponentTypes[property.id] === 'MULTITEXT'">
+                    <!-- INICIO MULTITEXT -->
+                    <template v-else-if="propertyComponentTypes[property.id] === 'MULTITEXT'">
                         <custom-multitext-value-input
                             v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
                             :id="toCamelCase(property.label)"
@@ -61,7 +62,21 @@
                             <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
                         </template>
 
-                     </template>
+                    </template>
+                    <!-- FIN MULTITEXT -->
+                    <!-- INICIO TEXTAREA -->
+                    <template v-else-if="propertyComponentTypes[property.id] === 'TEXTAREA'">
+                        <custom-textarea-input
+                            v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
+                            :id="toCamelCase(property.label)"
+                            :name="toCamelCase(property.label)"
+                            @update:modelValue="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
+                        />
+                        <template v-if="errors[toCamelCase(property.label)]">
+                            <p v-for="error in errors[toCamelCase(property.label)]" class="help is-danger">{{ error }}</p>
+                        </template>
+                    </template>
+                    <!-- FIN TEXTAREA -->
                     <!-- INICIO otros tipos de propiedad -->
                     <template v-else>
                         <input
@@ -147,6 +162,7 @@
     import {
         SelectSercheable as CustomSelectInput,
         MultitextValue as CustomMultitextValueInput,
+        CustomTextarea as CustomTextareaInput,
     } from 'vue-ui-kit'
     import { propertyComponentTypes } from '@/application/constants/propertyInputsComponents'
     import { toCamelCase } from '@/utils/stringHelpers'
