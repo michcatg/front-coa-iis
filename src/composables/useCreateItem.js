@@ -16,7 +16,10 @@ export function useCreateItem() {
 
     try {
       const response = await createRecursoDigitalCompleto(
-        data,
+        {
+          ... data,
+          datosCatalogacion: cleanEmpty(data.datosCatalogacion)
+        },
         files
       )
       state.isSuccess = true
@@ -31,6 +34,16 @@ export function useCreateItem() {
     } finally {
       state.isLoading = false
     }
+  }
+
+  function cleanEmpty(obj) {
+    console.log('Cleaning object:', obj);
+    Object.keys(obj).forEach(key => {
+      if (obj[key].value === null || obj[key].value === undefined || obj[key].value === '' || (Array.isArray(obj[key].value) && obj[key].value.length === 0)) {
+        delete obj[key];
+      }
+    });
+    return obj;
   }
 
   return {
