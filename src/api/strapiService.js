@@ -124,7 +124,6 @@ export async function getResourceTemplatesSourceByCategories(categoryIds = null)
 
 export async function getAuthors( options = {} ) {
   const authConfig = strapiAuthService.getAuthConfig()
-  console.log (options)
   let stringOptions = getQueryStringWithOptions(options)
   const url = `${getStrapiBase()}/autores?${stringOptions}`
   return http.get(url, authConfig)

@@ -25,8 +25,6 @@ export function useAuthorsGeneralesQuery(options={
         ).map(toSnakeCase),
         ...finalOptions
       })
-      // TODO: Ver porque falla el map
-      console.log(response.data)
       authors.value = response.data.data.map(autorStrapitoAutorGeneralesDto)
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {

@@ -16,7 +16,6 @@ export function useResourceTemplates() {
     try {
       const response = await getOmekasResoruceTemplatesApi()
       resourceTemplates.splice(0, resourceTemplates.length, ...response.data.map(omekasResourceTemplateToResourceTemplateDto))
-      console.log('Resource Templates fetched:', resourceTemplates)
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error)

@@ -37,7 +37,6 @@ export function useCreateItem() {
   }
 
   function cleanEmpty(obj) {
-    console.log('Cleaning object:', obj);
     Object.keys(obj).forEach(key => {
       if (obj[key].value === null || obj[key].value === undefined || obj[key].value === '' || (Array.isArray(obj[key].value) && obj[key].value.length === 0)) {
         delete obj[key];

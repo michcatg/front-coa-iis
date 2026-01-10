@@ -204,7 +204,6 @@
             if (!data.autores) {
                 return
             }
-            console.log('Validando autores:', data.autores)
             validateField(
                 'autores',
                 [...data.autores],
