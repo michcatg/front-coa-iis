@@ -71,7 +71,7 @@
               aria-label="Agregar otro valor"
             >
               <span class="icon" aria-hidden="true">
-              <font-awesome-icon :icon="['fas', 'plus']" />
+              <font-awesome-icon :icon="faPlus" />
               </span>
             </button>
             <button
@@ -82,7 +82,7 @@
               aria-label="Borrar este valor"
             >
               <span class="icon" aria-hidden="true">
-              <font-awesome-icon :icon="['fas', 'trash']" />
+              <font-awesome-icon :icon="faTrash" />
               </span>
             </button>
             </div>
@@ -92,7 +92,7 @@
         <div class="control">
           <button class="button is-primary" type="submit" aria-label="Buscar">
             <span class="icon" aria-hidden="true">
-                <font-awesome-icon :icon="['fas', 'magnifying-glass']" />
+                <font-awesome-icon :icon="faMagnifyingGlass" />
             </span>
             <span>Buscar</span>
           </button>
@@ -100,7 +100,7 @@
         <div class="control">
           <button class="button is-primary is-light" type="reset" aria-label="Limpiar búsqueda" @click.prevent="cleanFullQuery">
             <span class="icon" aria-hidden="true">
-              <font-awesome-icon :icon="['fas', 'trash']" />
+              <font-awesome-icon :icon="faTrash" />
             </span>
             <span>Limpiar búsqueda</span>
           </button>
@@ -118,6 +118,7 @@
   import { SelectSercheable as SelectSearchable } from 'vue-ui-kit'
   import 'vue-ui-kit/dist/vue-ui-kit.css';
   import { searchOperators } from '@/application/constants/omekasSearchOperations';
+  import { faPlus, faTrash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
   const emit = defineEmits(['search'])
   //const resourceTemplatesRecovered = ref([])
