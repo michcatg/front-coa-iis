@@ -32,6 +32,10 @@
       type: String,
       default: 'info'
     },
+    isDismissible: {
+      type: Boolean,
+      default: true
+    }
   })
 </script>
 <style lang="scss" scoped>
