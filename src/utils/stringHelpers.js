@@ -25,3 +25,13 @@ export function toSnakeCase (str) {
     .map(x => x.toLowerCase())
     .join('_')
 }
+
+export function toCamelCase (str) {
+  const normalized = str && str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+  const pascalCase = normalized && normalized.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .map(x => x.charAt(0).toUpperCase() + x.slice(1).toLowerCase())
+    .join('')
+  return pascalCase.charAt(0).toLowerCase() + pascalCase.slice(1)
+}
