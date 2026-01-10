@@ -1,5 +1,5 @@
 // TODO: Manejar dinámicamente con CMS y motor de validaciones
-export const fieldsValidators = {
+const fieldsValidators = {
     categoria: (value) => {
         return {
             messages: ['La categoría es obligatoria'],
