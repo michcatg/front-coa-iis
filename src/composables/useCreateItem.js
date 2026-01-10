@@ -18,7 +18,7 @@ export function useCreateItem() {
       const response = await createRecursoDigitalCompleto(
         {
           ... data,
-          datosCatalogacion: cleanEmpty(data.datosCatalogacion)
+          datosCatalogacion: cleanEmpty({... data.datosCatalogacion})
         },
         files
       )
