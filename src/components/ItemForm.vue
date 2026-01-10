@@ -188,6 +188,9 @@
     const errors = reactive({})
 
     function setAutor(dataAutor) {
+        if (!dataAutor || Object.keys(dataAutor).length === 0) {
+            return
+        }
         if (!data.autores) {
             data.autores = []
         }

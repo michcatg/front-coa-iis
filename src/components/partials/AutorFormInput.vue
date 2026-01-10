@@ -11,12 +11,19 @@
                 key-value="id"
                 key-text="labels"
                 multiple
-                placeholder="Seleccione autores..."
+                :disabled="autoresTransformados.length === 0"
+                :placeholder="(autoresTransformados.length === 0) ? 'No hay autores disponibles' : 'Seleccione autores...'"
             />
             <button
                 type="button"
-                class="button is-link is-light ml-2"
-                @click="emit('select-autor', props.autores.find(autor => autor.id === autorSeleccionado)); autorSeleccionado = null"
+                :class="['button', 'is-light', 'ml-2', isDisabled ? 'disabled' : 'is-link']"
+                :disabled="isDisabled"
+                @click="emit(
+                    'select-autor', (autorSeleccionado) ?
+                        props.autores.find(autor => autor.id === autorSeleccionado) :
+                        {}
+                ); autorSeleccionado = null
+                "
             >
                 <span class="icon is-small mr-1">
                     <font-awesome-icon :icon="faUserTag" />
@@ -28,7 +35,6 @@
             class="button is-info is-light"
             type="button"
             @click="emit('add-autor', true)"
-            :disabled="isDisabled"
         >
             <span class="icon is-small mr-1">
                 <font-awesome-icon :icon="faUserPlus" />
@@ -47,13 +53,16 @@
                     :class="{ 'is-last-selected': index === lastAddedAutorIndex }"
                 >
                     {{ autor.nombres }} {{ autor.primerApellido }} {{ autor.segundoApellido }} ({{ autor.correoElectronico }})
+                    <span v-if="!props.autores.some(a => a.correoElectronico === autor.correoElectronico)" class="tag is-info ml-2 mr-2">nuevo</span>
                     <button
                         type="button"
                         class="button is-danger is-small is-light"
                         @click="model.splice(index, 1)"
                     >
-                        <FontAwesomeIcon class=" is-small mr-2" :icon="faTimes" />
                         Remover
+                        <span class="icon is-small ml-1">
+                            <font-awesome-icon :icon="faTimes" />
+                        </span>
                     </button>
                 </li>
             </transition-group>
@@ -79,17 +88,21 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     const emit = defineEmits(['update:modelValue', 'add-autor', 'select-autor']);
     const autorSeleccionado = ref(null);
     const isDisabled = computed(() => {
-        return props.autores.length === 0;
+        return props.autores.length === 0 || autorSeleccionado.value === null;
     });
     const autoresTransformados = computed(() => {
-        return props.autores.map(autor => ({
-            id: autor.id,
-            labels: `${autor.nombres} ${autor.primerApellido} ${autor.segundoApellido} (${autor.correoElectronico})`
-        }))
+        // Filtrar autores que ya están en el model (comparando por correoElectronico)
+        return props.autores
+            .filter(autor => !model.value?.some(a => a.correoElectronico === autor.correoElectronico))
+            .map(autor => ({
+                id: autor.id,
+                labels: `${autor.nombres} ${autor.primerApellido} ${autor.segundoApellido} (${autor.correoElectronico})`
+            }))
     })
 </script>
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/button";
+  @forward "bulma/sass/elements/tag";
   @forward "bulma/sass/form";
   @forward "@/assets/sass/listChangesEffects.scss";
 </style>

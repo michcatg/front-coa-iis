@@ -5,7 +5,8 @@ import { AutorGeneralesDto } from '@/application/dtos/AutorGeneralesDto'
 import { toSnakeCase } from '@/utils/stringHelpers'
 
 export function useAuthorsGeneralesQuery(options={
-  limit: 10,
+  // TODO: Manejar paginaicón
+  limit: 100000000000,
   page: 1,
 }) {
   const isLoading = ref(false)
