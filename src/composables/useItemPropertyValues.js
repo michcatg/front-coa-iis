@@ -14,7 +14,7 @@ export function useItemPropertyValues({
         if (resourceTemplate.value) {
             resourceTemplate.value.properties.forEach((property) => {
                 const values = getPropertyValuesForPropertyWithId(property.id);
-                if (values.length) {
+                if (values?.length) {
                     mappedValues.push({
                         propertyId: property.id,
                         propertyLabel: property.label || values[0].propertyLabel,
