@@ -5,6 +5,7 @@
         <div class="is-flex is-justify-content-right is-align-items-center" style="width: 100%">
           <!--<h2 class="modal-card-title title is-3 mb-0 has-text-white"></h2>-->
             <button
+              v-if="isDismissible"
               :class="`button is-rounded is-ghost p-1 has-text-${type} has-text-weight-bold close-button`"
               style="border: none;"
               aria-label="close"
