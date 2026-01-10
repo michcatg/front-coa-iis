@@ -40,8 +40,10 @@
                     <template v-if="isPropertyAutor(property.id)">
                         <autor-form-input
                             v-model="data.autores"
+                            :autores="autores"
                             :last-added-autor-index="lastAddedAutorIndex"
                             @add-autor="isAddingAutor = true"
+                            @select-autor="setAutor($event)"
                         />
                         <template v-if="errors.autores">
                             <p v-for="error in errors.autores" class="help is-danger">{{ error }}</p>
@@ -108,14 +110,7 @@
         <!--INICIO modals section-->
         <autor-form-modal
             v-if="isAddingAutor"
-            @submit="(dataAutor) => {
-                if (!data.autores) {
-                    data.autores = []
-                }
-                data.autores.push(dataAutor)
-                lastAddedAutorIndex = data.autores.length - 1
-                isAddingAutor = false
-            }"
+            @submit="setAutor"
             @close="isAddingAutor=false"
         />
         <action-notification-modal
@@ -172,6 +167,10 @@
         resourceTemplates: {
             type: Array,
             required: true,
+        },
+        autores: {
+            type: Array,
+            default: []
         }
     })
     const isAddingAutor = ref(false)
@@ -188,9 +187,20 @@
     const archivos = ref([])
     const errors = reactive({})
 
+    function setAutor(dataAutor) {
+        if (!data.autores) {
+            data.autores = []
+        }
+        data.autores.push(dataAutor)
+        lastAddedAutorIndex.value = data.autores.length - 1
+        isAddingAutor.value = false
+    }
     watch (
         () => data.autores,
         () => {
+            if (!data.autores) {
+                return
+            }
             console.log('Validando autores:', data.autores)
             validateField(
                 'autores',
