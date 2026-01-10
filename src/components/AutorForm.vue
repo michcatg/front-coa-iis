@@ -114,13 +114,23 @@
                     Agregar
                 </button>
             </div>
+            <div class="control">
+                <button
+                    type="button"
+                    class="button is-danger is-outlined"
+                    role="button"
+                    @click="emit('cancel')"
+                >
+                    Cancelar
+                </button>
+            </div>
         </div>
     </form>
 </template>
 <script setup>
     import { defineEmits, reactive } from 'vue';
     import { CustomTextarea as CustomTextareaInput } from 'vue-ui-kit';
-    const emit = defineEmits(['submit']);
+    const emit = defineEmits(['submit', 'cancel']);
     const data = reactive({
         nombres: '',
         primerApellido: '',

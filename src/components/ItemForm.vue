@@ -34,14 +34,13 @@
                 <div class="control">
                     <!-- INICIO autor -->
                     <template v-if="isPropertyAutor(property.id)">
-                        <autor-form
-                            @submit="(dataAutor) => {
-                                if (!data.autores) {
-                                    data.autores = []
-                                }
-                                data.autores.push(dataAutor)
-                            }"
-                        />
+                        <button
+                            type="button"
+                            class="button is-link is-light mb-2"
+                            @click="isAddingAutor = true"
+                        >
+                            Agregar autor
+                        </button>
                         <div v-if="data.autores?.length" class="content">
                             <ul>
                                 <li
@@ -93,6 +92,17 @@
         <div v-if="createItem.state.isLoading">Enviando...</div>
         <div v-if="createItem.state.isError" style="color: red;">Error: {{ createItem.state.isError }}</div>
         <div v-if="createItem.state.isSuccess" style="color: green;">Recurso creado exitosamente!</div>
+        <autor-form-modal
+            v-if="isAddingAutor"
+            @submit="(dataAutor) => {
+                if (!data.autores) {
+                    data.autores = []
+                }
+                data.autores.push(dataAutor)
+                isAddingAutor = false
+            }"
+            @close="isAddingAutor=false"
+        />
     </form>
 </template>
 <script setup>
@@ -104,7 +114,7 @@
     import { getComponentById, getInputTypeById } from '@/application/constants/propertyInputsComponents'
     import { toCamelCase } from '@/utils/stringHelpers'
     import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
-    import AutorForm from './AutorForm.vue'
+    import AutorFormModal from './AutorFormModal.vue'
 
     const props = defineProps({
         /**
@@ -126,6 +136,7 @@
             required: true,
         }
     })
+    const isAddingAutor = ref(false)
 
     const createItem = useCreateItem()
 
