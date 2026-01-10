@@ -1,9 +1,5 @@
 <template>
     <form @submit.prevent="handleFormSubmit">
-        RESOURCE TEMPLATES
-        <pre>
-            {{ resourceTemplateSelected }}
-        </pre>
         <div class="field mb-4">
             <label
                 class="label"
@@ -36,13 +32,38 @@
                     {{ property.label }}
                 </label>
                 <div class="control">
-                    <input
-                        class="input"
-                        :id="toCamelCase(property.label)"
-                        :name="toCamelCase(property.label)"
-                        type="text"
-                        v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
-                    />
+                    <!-- INICIO autor -->
+                    <template v-if="isPropertyAutor(property.id)">
+                        <autor-form
+                            @submit="(dataAutor) => {
+                                if (!data.autores) {
+                                    data.autores = []
+                                }
+                                data.autores.push(dataAutor)
+                            }"
+                        />
+                        <div v-if="data.autores?.length" class="content">
+                            <ul>
+                                <li
+                                    v-for="(autor, index) in data.autores"
+                                    :key="index"
+                                >
+                                    {{ autor.nombres }} {{ autor.primerApellido }} {{ autor.segundoApellido }}
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                    <!-- FIN autor -->
+                    <!-- INICIO otros tipos de propiedad -->
+                        <input
+                            v-else
+                            class="input"
+                            :id="toCamelCase(property.label)"
+                            :name="toCamelCase(property.label)"
+                            type="text"
+                            v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
+                        />
+                    <!-- FIN otros tipos de propiedad -->
                 </div>
             </div>
         </template>
@@ -75,6 +96,8 @@
     } from 'vue-ui-kit'
     import { getComponentById, getInputTypeById } from '@/application/constants/propertyInputsComponents'
     import { toCamelCase } from '@/utils/stringHelpers'
+    import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
+    import AutorForm from './AutorForm.vue'
 
     const props = defineProps({
         /**
