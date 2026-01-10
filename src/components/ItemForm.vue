@@ -84,7 +84,7 @@
                             :class="{ 'is-danger': errors[toCamelCase(property.label)] }"
                             :id="toCamelCase(property.label)"
                             :name="toCamelCase(property.label)"
-                            type="text"
+                            :type="propertyComponentTypes[property.id] === 'DATE' ? 'date' : 'text'"
                             v-model="data.datosCatalogacion[toCamelCase(property.label)].value"
                             @input="validateField(toCamelCase(property.label), data.datosCatalogacion[toCamelCase(property.label)].value, errors)"
                         />
