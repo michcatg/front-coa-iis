@@ -9,7 +9,7 @@
         :aria-label="author?.image?.ariaLabel || `Imagen del autor ${author?.name}`"
       />
       <figcaption>
-        <p class=" content">{{ author?.image?.caption || `Autor: ${new AuthorEntity(author).getNombreCompleto()}` }}</p>
+        <p class=" content">{{ author?.image?.caption || (author)? `Autor: ${new AuthorEntity(author).getNombreCompleto()}` : '' }}</p>
       </figcaption>
     </figure>
     <div class="content">
