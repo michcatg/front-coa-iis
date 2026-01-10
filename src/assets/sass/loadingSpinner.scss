@@ -1,0 +1,29 @@
+/* INICIO: Estilos del spinner */
+.loading-container {
+display: flex;
+align-items: center;
+justify-content: flex-start;
+}
+
+.spinner {
+border: 3px solid rgba(0, 0, 0, 0.1); // Color de fondo del círculo
+border-top: 3px solid #3273dc; // Color del spinner (azul de Bulma)
+border-radius: 50%;
+width: 24px;
+height: 24px;
+animation: spin 0.8s linear infinite; // Animación de rotación
+}
+
+@keyframes spin {
+0% {
+    transform: rotate(0deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+
+.ml-3 {
+margin-left: 0.75rem;
+}
+/* FIN: Estilos del spinner */

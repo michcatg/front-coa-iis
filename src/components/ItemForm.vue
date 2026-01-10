@@ -131,9 +131,6 @@
                 </button>
             </div>
         </div>
-        <div v-if="createItem.state.isLoading">Enviando...</div>
-        <div v-if="createItem.state.isError" style="color: red;">Error: {{ createItem.state.isError }}</div>
-        <div v-if="createItem.state.isSuccess" style="color: green;">Recurso creado exitosamente!</div>
         <autor-form-modal
             v-if="isAddingAutor"
             @submit="(dataAutor) => {
@@ -151,7 +148,18 @@
             :type="(createItem.state.isSuccess) ? 'success' : 'danger'"
             @close="createItem.resetState()"
         >
+            <font-awesome-icon :icon="createItem.state.isSuccess ? faCheckCircle : faExclamationCircle" class="mr-2" />
             {{ createItem.state.isSuccess ? 'El recurso ha sido creado exitosamente.' : 'Ha ocurrido un error al crear el recurso: ' + createItem.state.isError }}
+        </action-notification-modal>
+        <action-notification-modal
+            v-if="createItem.state.isLoading"
+            type="info"
+            :is-dismissible="false"
+        >
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <span class="ml-3">Enviando recurso, por favor espere...</span>
+            </div>
         </action-notification-modal>
     </form>
 </template>
@@ -165,7 +173,7 @@
     import { toCamelCase } from '@/utils/stringHelpers'
     import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
     import AutorFormModal from './AutorFormModal.vue'
-    import { faUpload } from '@fortawesome/free-solid-svg-icons'
+    import { faUpload, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
     import ActionNotificationModal from '@/shared/ActionNotificationModal.vue'
     import { validateForm, validateField } from '@/application/helpers/validateCreateItemFormHelper'
 
@@ -280,4 +288,5 @@
   @forward "bulma/sass/elements/button";
   @forward "bulma/sass/form";
   @forward "@/assets/sass/listChangesEffects.scss";
+  @forward "@/assets/sass/loadingSpinner.scss";
 </style>
