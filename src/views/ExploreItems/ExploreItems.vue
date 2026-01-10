@@ -1,5 +1,5 @@
 <template>
-  <section class="section container">
+  <section class="section container mb-6">
     <search-form
       :initial-fulltext-search="searchOptions.fulltext_search"
       :initial-property="searchOptions.property"
