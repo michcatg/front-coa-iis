@@ -15,7 +15,10 @@
                     key-value="id"
                     key-text="name"
                     placeholder="Seleccione una categoría"
-                    @update:modelValue="validateField('categoria', data.categoria, errors)"
+                    @update:modelValue="() => {
+                        if (isResetting) return;
+                        validateField('categoria', data.categoria, errors)
+                    }"
                 />
             </div>
             <template v-if="errors.categoria">
@@ -235,6 +238,7 @@
     }
     const handleFileChange = (event) => {
         archivos.value = event.target.files[0]
+        if (isResetting.value) return;
         validateField('archivo', archivos.value, errors)
     }
 
@@ -263,14 +267,20 @@
         return template
     })
 
+    const isResetting = ref(false)
     watch(() => createItem.state.isSuccess, (isSuccess) => {
         if (isSuccess) {
+            isResetting.value = false
+            isResetting.value = true
             data.datosCatalogacion = {}
             data.resourceTemplate = null
             data.autores = []
             data.categoria = null
             archivos.value = []
             Object.keys(errors).forEach(key => delete errors[key])
+            setTimeout(() => {
+                isResetting.value = false
+            }, 0)
         }
     })
 
