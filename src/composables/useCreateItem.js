@@ -46,8 +46,15 @@ export function useCreateItem() {
     return obj;
   }
 
+  function resetState() {
+    state.isLoading = false
+    state.isError = false
+    state.isSuccess = false
+  }
+
   return {
     state,
-    post
+    post,
+    resetState
   }
 }
