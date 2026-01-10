@@ -131,7 +131,7 @@
     </form>
 </template>
 <script setup>
-    import { reactive, ref, computed } from 'vue'
+    import { reactive, ref, computed, watch } from 'vue'
     import { useCreateItem } from '@/composables/useCreateItem'
     import {
         SelectSercheable as CustomSelectInput,
@@ -209,6 +209,17 @@
         data.resourceTemplate = template ? template.id : null
         return template
     })
+
+    watch(() => createItem.state.isSuccess, (isSuccess) => {
+        if (isSuccess) {
+            data.datosCatalogacion = {}
+            data.resourceTemplate = null
+            data.autores = []
+            data.categoria = null
+            archivos.value = []
+        }
+    })
+
 </script>
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/button";
