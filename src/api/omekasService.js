@@ -18,6 +18,9 @@ export async function getOmekaItem(id) {
 export async function getOmekasResourceTemplate(id) {
   return http.get(`${getOmekaBase()}/resource_templates/${id}`)
 }
+export async function getOmekasResoruceTemplates() {
+  return http.get(`${getOmekaBase()}/resource_templates`)
+}
 
 /**
  * Obtiene los elementos recientes de Omekas.
