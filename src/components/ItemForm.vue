@@ -74,9 +74,27 @@
             </div>
         </template>
         <!-- TERMINA DATOS DE CATALOGACIÓN -->
-        <div>
-            <label for="archivo">Archivo:</label>
-            <input id="archivo" name="archivo" type="file" @change="handleFileChange" />
+        <div class="field mb-4">
+            <label
+                class="label"
+                for="archivo"
+            >
+                Archivo
+            </label>
+            <div class="control mb-4">
+                <div class="file is-link has-name">
+                    <label class="file-label">
+                        <input id="archivo" class="file-input" name="archivo" type="file" @change="handleFileChange" />
+                        <span class="file-cta">
+                        <span class="file-icon">
+                            <font-awesome-icon :icon="faUpload" />
+                        </span>
+                        <span class="file-label"> Seleccione un archivo… </span>
+                        </span>
+                        <span class="file-name"> {{ archivos ? archivos.name : '' }} </span>
+                </label>
+                </div>
+            </div>
         </div>
         <div class="field is-grouped">
             <div class="control">
@@ -115,6 +133,7 @@
     import { toCamelCase } from '@/utils/stringHelpers'
     import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
     import AutorFormModal from './AutorFormModal.vue'
+    import { faUpload } from '@fortawesome/free-solid-svg-icons'
 
     const props = defineProps({
         /**
