@@ -159,7 +159,7 @@
     import AutorFormModal from './AutorFormModal.vue'
     import { faUpload } from '@fortawesome/free-solid-svg-icons'
     import ActionNotificationModal from '@/shared/ActionNotificationModal.vue'
-    import { validateForm, fieldsValidators, validateField } from '@/application/helpers/validateCreateItemFormHelper'
+    import { validateForm, validateField } from '@/application/helpers/validateCreateItemFormHelper'
 
     const props = defineProps({
         /**
