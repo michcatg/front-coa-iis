@@ -42,7 +42,6 @@
                             v-model="data.autores"
                             :autores="autores"
                             :last-added-autor-index="lastAddedAutorIndex"
-                            @add-autor="isAddingAutor = true"
                             @select-autor="setAutor($event)"
                         />
                         <template v-if="errors.autores">
@@ -108,11 +107,6 @@
             </div>
         </div>
         <!--INICIO modals section-->
-        <autor-form-modal
-            v-if="isAddingAutor"
-            @submit="setAutor"
-            @close="isAddingAutor=false"
-        />
         <action-notification-modal
             v-if="createItem.state.isSuccess || createItem.state.isError"
             :type="(createItem.state.isSuccess) ? 'success' : 'danger'"
@@ -143,7 +137,6 @@
     import { getComponentById, getInputTypeById } from '@/application/constants/propertyInputsComponents'
     import { toCamelCase } from '@/utils/stringHelpers'
     import { isPropertyAutor } from '@/application/helpers/omekasPropertiesHelper'
-    import AutorFormModal from './AutorFormModal.vue'
     import { faUpload, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
     import ActionNotificationModal from '@/shared/ActionNotificationModal.vue'
     import { validateForm, validateField } from '@/application/helpers/validateCreateItemFormHelper'
@@ -173,7 +166,6 @@
             default: []
         }
     })
-    const isAddingAutor = ref(false)
     const lastAddedAutorIndex = ref(null)
 
     const createItem = useCreateItem()
@@ -196,7 +188,6 @@
         }
         data.autores.push(dataAutor)
         lastAddedAutorIndex.value = data.autores.length - 1
-        isAddingAutor.value = false
     }
     watch (
         () => data.autores,

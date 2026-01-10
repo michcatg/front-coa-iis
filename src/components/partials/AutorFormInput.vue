@@ -34,7 +34,7 @@
         <button
             class="button is-info is-light"
             type="button"
-            @click="emit('add-autor', true)"
+            @click="isAddingAutor = true"
         >
             <span class="icon is-small mr-1">
                 <font-awesome-icon :icon="faUserPlus" />
@@ -67,13 +67,20 @@
                 </li>
             </transition-group>
         </div>
+        <autor-form-modal
+            v-if="isAddingAutor"
+            @submit="emit('select-autor', $event); isAddingAutor=false"
+            @close="isAddingAutor=false"
+        />
     </div>
 </template>
 <script setup>
     import { defineEmits, computed, ref } from 'vue';
     import { faUserPlus, faUserTag, faTimes } from '@fortawesome/free-solid-svg-icons';
     import { SelectSercheable as CustomSelectInput } from 'vue-ui-kit'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import AutorFormModal from '@/components/AutorFormModal.vue'
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    const isAddingAutor = ref(false);
     const props = defineProps({
         lastAddedAutorIndex: {
             type: Number,
@@ -85,7 +92,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         }
     })
     const model = defineModel()
-    const emit = defineEmits(['update:modelValue', 'add-autor', 'select-autor']);
+    const emit = defineEmits(['update:modelValue', 'select-autor']);
     const autorSeleccionado = ref(null);
     const isDisabled = computed(() => {
         return props.autores.length === 0 || autorSeleccionado.value === null;
