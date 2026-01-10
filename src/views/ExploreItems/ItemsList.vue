@@ -28,7 +28,7 @@
                   v-if="isListView"
                   class="button is-link is-light"
                   @click="() => router.push({ name: 'itemDetail', params: { id: item.id } })"
-                  aria-label="Ver detalle del item {{ item.title }}"
+                  :aria-label="`Ver detalle del item ${item.title}`"
                   role="link"
                 >
                   Ver detalle
@@ -39,14 +39,14 @@
               <time :datetime="item.createdAt" class="has-text-grey">
                 <small>{{ item.createdAt }}</small>
               </time>
-              <button
+              <a
                 class="button is-link is-light"
                 @click="() => router.push({ name: 'itemDetail', params: { id: item.id } })"
-                aria-label="Ver detalle del item {{ item.title }}"
+                :aria-label="`Ver detalle del item ${item.title}`"
                 role="link"
               >
                 Ver detalle
-              </button>
+              </a>
               <moreLowText
                 v-if="isListView"
                 :text="item.description"
