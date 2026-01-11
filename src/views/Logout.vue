@@ -18,13 +18,4 @@ authStore.logout();
 <style lang="scss" scoped>
   @forward "bulma/sass/elements/title";
   @forward "bulma/sass/elements/button";
-  @forward "bulma/sass/form";
-  @forward "@/assets/sass/loadingSpinner.scss";
-  .password-toggle {
-    border: none;
-    background: transparent;
-    box-shadow: none;
-    padding: 0 0.25rem;
-    cursor: pointer;
-  }
 </style>
