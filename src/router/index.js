@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { hasCreateItemPermission, hasSession } from '../application/helpers/userPermissionsHelper'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,17 +57,36 @@ const router = createRouter({
     {
       path: '/admin/items/new',
       name: 'createItems',
+      beforeEnter: (to, from, next) => {
+        if (hasCreateItemPermission()) {
+          next();
+        } else {
+          next({ name: 'not-found' });
+        }
+      },
       component: () => import('../views/CreateItem.vue')
     },
     {
       path: '/login',
       name: 'login',
+      beforeEnter: (to, from, next) => {
+        if (hasSession()) {
+          next({ name: 'home' });
+        } else {
+          next();
+        }
+      },
       component: () => import('../views/Login.vue')
     },
     {
       path: '/logout',
       name: 'logout',
       component: () => import('../views/Logout.vue')
+    },
+    {
+      path: '/not-found',
+      name: 'not-found',
+      component: () => import('../views/NotFound.vue')
     }
   ],
 })
