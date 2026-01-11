@@ -5,6 +5,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'home',
       redirect: '/categories/'
     },
     {
@@ -56,6 +57,11 @@ const router = createRouter({
       path: '/admin/items/new',
       name: 'createItems',
       component: () => import('../views/CreateItem.vue')
+    },
+    {
+      path: '/admin/login',
+      name: 'login',
+      component: () => import('../views/Login.vue')
     }
   ],
 })

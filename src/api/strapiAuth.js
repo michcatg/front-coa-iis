@@ -1,3 +1,4 @@
+import { getStrapiBase } from '@/api/strapiService.js'
 // API Key por defecto desde las variables de entorno
 const DEFAULT_API_KEY = import.meta.env.VITE_STRAPI_API_KEY || ''
 
@@ -29,6 +30,13 @@ export function configureBearerToken(token = DEFAULT_API_KEY) {
  */
 export const strapiAuthService = {
   defaultApiKey: DEFAULT_API_KEY,
+  /**
+   * Configura el token de autenticación en el localStorage
+   * @param {string} token - Token de autenticación
+   */
+  setAuthToken(token) {
+    localStorage.setItem('strapiAuthToken', token)
+  },
 
   /**
    * Obtiene el token de autenticación del localStorage
@@ -36,6 +44,13 @@ export const strapiAuthService = {
    */
   getAuthToken() {
     return localStorage.getItem('strapiAuthToken')
+  },
+
+  /**
+   * Elimina el token de autenticación del localStorage
+   */
+  removeAuthToken() {
+    localStorage.removeItem('strapiAuthToken')
   },
 
   /**
@@ -55,4 +70,87 @@ export const strapiAuthService = {
     const token = customToken || this.getToken()
     return configureBearerToken(token)
   },
+
+  /**
+   * Login con email y password (para usuarios de Strapi)
+   * @param {string} identifier - Email o username
+   * @param {string} password - Contraseña
+   * @returns {Promise<object>} Respuesta del login
+   */
+  async login(identifier, password) {
+    try {
+      const response = await fetch(`${getStrapiBase()}/auth/local`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          identifier,
+          password
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Error al iniciar sesión.`)
+      }
+
+      const data = await response.json()
+      
+      // Guardar el JWT token del usuario
+      if (data.jwt) {
+        this.setAuthToken(data.jwt)
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error en login de Strapi:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Logout del usuario
+   */
+  logout() {
+    this.removeAuthToken()
+  },
+
+  /**
+   * Verifica si el usuario está autenticado
+   * @returns {boolean} True si hay token o API key por defecto
+   */
+  isAuthenticated() {
+    const token = this.getToken()
+    return !!token
+  },
+
+  /**
+   * Obtiene la información del usuario actual
+   * @returns {Promise<object>} Datos del usuario
+   */
+  async getCurrentUser() {
+    const token = this.getAuthToken()
+    if (!token) {
+      throw new Error('No hay usuario autenticado')
+    }
+
+    try {
+      const response = await fetch(`${getStrapiBase()}/users/me`, {
+        headers: {
+          Authorization: getBearerToken(token)
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`Error al obtener usuario: ${response.statusText}`)
+      }
+
+      return await response.json()
+    } catch (error) {
+      console.error('Error al obtener usuario actual:', error)
+      // Si hay error, limpiar token inválido
+      this.removeAuthToken()
+      throw error
+    }
+  }
 }
