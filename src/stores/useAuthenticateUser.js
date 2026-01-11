@@ -3,8 +3,8 @@ import { defineStore } from 'pinia'
 import { strapiAuthService as authService} from '@/api/strapiAuth.js';
 
 export const useAuthenticateUserStore = defineStore('authenticateUser', () => {
-  const isAuthenticated = ref(false);
-  const currentUser = ref({});
+  const isAuthenticated = ref(authService.isAuthenticated());
+  const currentUser = ref(localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : null);
   //const isAuthenticated = ref(false);
 
   function authenticate(username, password) {
@@ -16,6 +16,7 @@ export const useAuthenticateUserStore = defineStore('authenticateUser', () => {
             .then(user => {
               console.log("usuario", user)
               currentUser.value = {...user};
+              localStorage.setItem('currentUser', JSON.stringify(user))
             })
             .catch(error => {
               console.error ('Error fetching current user:', error);
@@ -36,6 +37,7 @@ export const useAuthenticateUserStore = defineStore('authenticateUser', () => {
   function logout() {
     authService.logout()
     isAuthenticated.value = authService.isAuthenticated()
+    localStorage.removeItem('currentUser')
   }
 
   return { isAuthenticated, currentUser, authenticate, logout }

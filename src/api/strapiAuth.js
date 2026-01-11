@@ -117,10 +117,10 @@ export const strapiAuthService = {
 
   /**
    * Verifica si el usuario está autenticado
-   * @returns {boolean} True si hay token o API key por defecto
+   * @returns {boolean} True si hay token de autenticaciÓn
    */
   isAuthenticated() {
-    const token = this.getToken()
+    const token = this.getAuthToken()
     return !!token
   },
 

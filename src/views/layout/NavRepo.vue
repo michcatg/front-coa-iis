@@ -27,7 +27,7 @@
         </div>
 
         <div id="navMenuRepo" :class="['navbar-menu', {'is-active': isActive}]">
-            <div class="navbar-end">
+            <div class="navbar-start">
                 <RouterLink to="/categories" class="navbar-item">
                     Categorías
                 </RouterLink>
@@ -35,12 +35,43 @@
                     Items
                 </RouterLink>
             </div>
+            <div class="navbar-end">
+                <RouterLink
+                    v-if="!authStore.isAuthenticated"
+                    to="/login"
+                    class="navbar-item"
+                >
+                    Iniciar sesión
+                </RouterLink>
+                <div v-else class="navbar-item has-dropdown is-hoverable">
+                    <span class="navbar-link">
+                        {{ authStore.currentUser?.username || '' }}
+                    </span>
+
+                    <div class="navbar-dropdown">
+                        <RouterLink
+                            to="/admin/items/new"
+                            class="navbar-item"
+                        >
+                            Crear recurso
+                        </RouterLink>
+                        <RouterLink
+                            to="/logout"
+                            class="navbar-item"
+                        >
+                            Cerrar sesión
+                        </RouterLink>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 </template>
 <script setup>
     import { ref } from 'vue';
     import { RouterLink } from 'vue-router'
+    import { useAuthenticateUserStore } from '@/stores/useAuthenticateUser';
+    const authStore = useAuthenticateUserStore();
     const isActive = ref(false);
 </script>
 <style lang="scss" scoped>
