@@ -4,6 +4,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: '/categories/'
+    },
+    {
       path: '/items/',
       name: 'items',
       component: () => import('../views/ExploreItems/ExploreItems.vue'),
@@ -45,7 +49,6 @@ const router = createRouter({
     {
       path: '/categories/:slug',
       name: 'category',
-      // TODO: Crear vista específica para categoría
       component: () => import('../views/ExploreCategories.vue'),
       props: true,
     },
@@ -53,12 +56,6 @@ const router = createRouter({
       path: '/admin/items/new',
       name: 'createItems',
       component: () => import('../views/CreateItem.vue')
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: () => import('../views/Test.vue'),
-      props: true,
     }
   ],
 })
