@@ -8,13 +8,11 @@ export const useAuthenticateUserStore = defineStore('authenticateUser', () => {
   //const isAuthenticated = ref(false);
 
   function authenticate(username, password) {
-    console.log("entrar")
     authService.login(username, password)
       .then(response => {
           isAuthenticated.value = authService.isAuthenticated();
           authService.getCurrentUser()
             .then(user => {
-              console.log("usuario", user)
               currentUser.value = {...user};
               localStorage.setItem('currentUser', JSON.stringify(user))
             })
