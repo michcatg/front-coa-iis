@@ -1,6 +1,7 @@
 import { getStrapiBase } from '@/api/strapiService.js'
+import { getStrapiApiKey } from './config'
 // API Key por defecto desde las variables de entorno
-const DEFAULT_API_KEY = import.meta.env.VITE_STRAPI_API_KEY || ''
+const DEFAULT_API_KEY = getStrapiApiKey() || ''
 
 /**
  * Genera un token Bearer a partir de una API key o token

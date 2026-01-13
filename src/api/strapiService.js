@@ -1,5 +1,5 @@
 import http from './httpClient'
-import { STRAPI_URL } from './config'
+import { getStrapiUrl } from './config'
 import { strapiAuthService } from './strapiAuth'
 import { getFilterCategories, getQueryStringWithOptions } from './strapiHelpers'
 
@@ -10,7 +10,7 @@ import { getFilterCategories, getQueryStringWithOptions } from './strapiHelpers'
  * @returns {string} - La URL base configurada para Strapi.
  */
 export function getStrapiBase(){
-  return STRAPI_URL
+  return getStrapiUrl()
 }
 
 /**

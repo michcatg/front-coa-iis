@@ -1,5 +1,5 @@
 import http from './httpClient'
-import { OMEKAS_URL } from './config'
+import { getOmekasUrl } from './config'
 
 /**
  * Obtiene la URL base para las solicitudes a Omekas.
@@ -8,7 +8,7 @@ import { OMEKAS_URL } from './config'
  * @returns {string} - La URL base configurada para Omekas.
  */
 export function getOmekaBase() {
-  return OMEKAS_URL
+  return getOmekasUrl()
 }
 
 export async function getOmekaItem(id) {
