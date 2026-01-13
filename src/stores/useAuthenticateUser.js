@@ -7,8 +7,8 @@ export const useAuthenticateUserStore = defineStore('authenticateUser', () => {
   const currentUser = ref(localStorage.getItem('currentUser') ? JSON.parse(localStorage.getItem('currentUser')) : null);
   //const isAuthenticated = ref(false);
 
-  function authenticate(username, password) {
-    authService.login(username, password)
+  async function authenticate(username, password) {
+    await authService.login(username, password)
       .then(response => {
           isAuthenticated.value = authService.isAuthenticated();
           authService.getCurrentUser()
@@ -17,13 +17,11 @@ export const useAuthenticateUserStore = defineStore('authenticateUser', () => {
               localStorage.setItem('currentUser', JSON.stringify(user))
             })
             .catch(error => {
-              console.error ('Error fetching current user:', error);
-              throw new Error('Error al obtener la información del usuario.');
+              throw error
             });
           
       })
       .catch(error => {
-            console.error ('Error during authentication:', error);
           throw new Error(
               (error && error.name === 'ValidationError') ?
                   'Credenciales inválidas. Por favor, intente de nuevo.' :

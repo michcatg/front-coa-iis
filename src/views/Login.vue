@@ -89,11 +89,11 @@ const username = ref("");
 const loginError = ref(null);
 const isLoading = ref(false);
 
-function handleSubmit() {
+async function handleSubmit() {
     loginError.value = null;
     isLoading.value = true;
     try {
-        authStore.authenticate(username.value, password.value)
+        await authStore.authenticate(username.value, password.value)
         router.push({ name: 'home' });
     }catch (error) {
         password.value = "";

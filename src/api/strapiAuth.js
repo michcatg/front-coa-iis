@@ -103,7 +103,7 @@ export const strapiAuthService = {
 
       return data
     } catch (error) {
-      console.error('Error en login de Strapi:', error)
+      //console.error('Error en login de Strapi:', error)
       throw error
     }
   },
