@@ -2,15 +2,7 @@ services:
   coa-iis:
     container_name: ${CONTAINER_NAME}
     image: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
-    working_dir: /var/www/coa-iis
-    volumes:
-      # host:container
-      # COMMENT FOR BUILD
-      - ${CODE_FILES}:/var/www/coa-iis:rw
-    # Dev command
-    command: npm run dev
-    # Build commmand
-    #command: [tail, -f, /dev/null]
+    working_dir: /app
     environment:
       - DEPLOY_PORT=${DEPLOY_PORT}
       - DEPLOY_DOMAIN=${DEPLOY_DOMAIN}

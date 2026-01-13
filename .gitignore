@@ -1,4 +1,11 @@
+# Environment container files
 .env
+.env.prod
+.env.dev
+# Environment services files
+.env.portal.prod
+.env.portal.dev
+
 # Logs
 logs
 *.log
