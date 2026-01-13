@@ -3,5 +3,3 @@ services:
     volumes:
       # host:container
       - ./nginx/logs:/etc/nginx/logs
-    env_file:
-      - ./.env.portal.prod

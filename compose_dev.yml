@@ -1,8 +1,6 @@
 services:
   coa-iis:
     image: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
-    env_file:
-      - ./.env.portal.dev
     volumes:
       # host:container
       # COMMENT FOR BUILD

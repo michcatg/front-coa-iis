@@ -3,9 +3,8 @@ services:
     container_name: ${CONTAINER_NAME}
     image: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
     working_dir: /app
-    environment:
-      - DEPLOY_PORT=${DEPLOY_PORT}
-      - DEPLOY_DOMAIN=${DEPLOY_DOMAIN}
+    env_file:
+      - ${ENV_SERVICES_FILE}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
