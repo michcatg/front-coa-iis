@@ -5,13 +5,13 @@
       @click="toggleCollapsed()"
     >
       <span>
-        Categorías
+        Categorías <small v-if="idsCategoriesSelected.length > 0">({{ idsCategoriesSelected.length }})</small>
       </span>  
       <span class="ml-2 icon is-size-7" aria-hidden="true">
         <font-awesome-icon :icon="collapsed ? faChevronDown : faChevronUp" />
       </span>
     </h2>
-    <div class="mt-3" v-if="collapsed">
+    <div class="mt-3" v-if="!collapsed">
       <p v-if="isError">Error al cargar las categorías.</p>
       <button
         v-if="idsCategoriesSelected.length > 0"
