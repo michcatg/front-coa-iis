@@ -12,10 +12,16 @@
       </div>
     </template>
     <template #body>
-      <div v-if="isLoading">Cargando...</div>
-      <div v-else-if="isError">Error al cargar la semblanza.</div>
+      <message v-if="!author || isLoading || isError"
+      :type="isError ? 'danger' : 'info'"
+    >
+      <template v-if="isError">Ha ocurrido un error al cargar la semblanza. Por favor, inténtalo de nuevo más tarde.</template>
+      <template v-else-if="isLoading">Cargando semblanza...</template>
+      <template v-else>No se encontró semblanza de la persona autora.</template>
+    </message>
       <div v-else>
         <autor-semblanza
+          v-if="author"
           :author="author"
         />
       </div>
@@ -30,6 +36,7 @@
   import modal from '@/components/common/modal.vue'
   import autorSemblanza from '@/components/partials/autorSemblanza.vue'
   import { faTimes } from '@fortawesome/free-solid-svg-icons'
+  import Message from "@/shared/presentation/Message.vue"
 
   const emit = defineEmits(["close"])
   const props = defineProps({

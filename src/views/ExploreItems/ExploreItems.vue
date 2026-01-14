@@ -57,8 +57,8 @@
       <profile-author-modal
         v-if="displayProfileAuthor"
         :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
-        :is-loading="isLoading"
-        :is-error="isError"
+        :is-loading="selectedAuthor?.useAuthorProfile?.isLoading"
+        :is-error="selectedAuthor?.useAuthorProfile?.isError"
         @close="displayProfileAuthor = false"
       />
     </div>
