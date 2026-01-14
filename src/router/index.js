@@ -49,12 +49,6 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/categories/:slug',
-      name: 'category',
-      component: () => import('../views/ExploreCategories.vue'),
-      props: true,
-    },
-    {
       path: '/admin/items/new',
       name: 'createItems',
       beforeEnter: (to, from, next) => {
