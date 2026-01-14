@@ -1,8 +1,9 @@
 import { getStrapiBase } from '@/api/strapiService.js'
 import { getStrapiApiKey } from './config'
 // API Key por defecto desde las variables de entorno
-const DEFAULT_API_KEY = getStrapiApiKey() || ''
-
+function getDefaultApiKey() {
+  return getStrapiApiKey();
+}
 /**
  * Genera un token Bearer a partir de una API key o token
  * @param {string} token - API key o token de autenticación
@@ -17,7 +18,7 @@ export function getBearerToken(token) {
  * @param {string} token - API key o token (opcional, usa el por defecto si no se proporciona)
  * @returns {object} Objeto de configuración con headers
  */
-export function configureBearerToken(token = DEFAULT_API_KEY) {
+export function configureBearerToken(token = getDefaultApiKey()) {
   return {
     headers: {
       Authorization: getBearerToken(token),
@@ -30,7 +31,7 @@ export function configureBearerToken(token = DEFAULT_API_KEY) {
  * Servicio de autenticación para Strapi
  */
 export const strapiAuthService = {
-  defaultApiKey: DEFAULT_API_KEY,
+  defaultApiKey: getDefaultApiKey(),
   /**
    * Configura el token de autenticación en el localStorage
    * @param {string} token - Token de autenticación
