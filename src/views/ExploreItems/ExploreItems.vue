@@ -57,8 +57,8 @@
       <profile-author-modal
         v-if="displayProfileAuthor"
         :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
-        :is-loading="selectedAuthor?.useAuthorProfile?.isLoading"
-        :is-error="selectedAuthor?.useAuthorProfile?.isError"
+        :is-loading="isLoadingSemblanza"
+        :is-error="isErrorSemblanza"
         @close="displayProfileAuthor = false"
       />
     </div>
@@ -152,7 +152,7 @@
   })
 
   /* INICIO Manejo de modal de perfil de autor */
-  const { displayProfileAuthor, selectedAuthor, processSemblanzaAuthor } = useAuthorProfileTriggerDisplay();
+  const { displayProfileAuthor, selectedAuthor, processSemblanzaAuthor, isLoading: isLoadingSemblanza, isError: isErrorSemblanza } = useAuthorProfileTriggerDisplay();
   /* FIN Manejo de modal de perfil de autor */
 
   /** Permite procesar la selección de categorías */
