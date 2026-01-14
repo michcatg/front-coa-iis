@@ -26,7 +26,11 @@ export function useItemsDetail(settings={}) {
       if (process.env.NODE_ENV === 'development') {
         console.error(error)
       }
-      isError.value = true
+      if (error.response && error.response.status === 404) {
+        itemDetail.value = null
+      }else {
+        isError.value = true
+      }
       throw error;
     } finally {
       isLoading.value = false

@@ -8,11 +8,13 @@
     </div>
 
     <div v-else>
-       <!-- TODO: Manejar de forma adecuada estados de error y carga -->
-      <div v-if="isLoading" class="has-text-centered">Cargando...</div>
-      <div v-else-if="isError" class="notification is-danger is-light has-text-centered">
-        Error al cargar los items.
-      </div>
+      <message v-if="itemDetail === null || isLoading || isError"
+        :type="isError ? 'danger' : 'info'"
+      >
+        <template v-if="isError">Ha ocurrido un error al cargar el detalle del item. Por favor, inténtalo de nuevo más tarde.</template>
+        <template v-else-if="isLoading">Cargando item...</template>
+        <template v-else>No se ha encontrado información del item para mostrar.</template>
+      </message>
       <div class="content" v-else>
         <!--<p class="notification is-info">
           Mostrando detalles para el ítem con ID: {{ id }}
@@ -102,6 +104,7 @@
   import { faFilePdf, faFileImage, faFileAlt } from '@fortawesome/free-solid-svg-icons';
   import { isAuthorPropertyValue } from '@/utils/format/itemHelpers.js';
   import { compareStrings } from "@/utils/stringHelpers";
+  import Message from '@/shared/presentation/Message.vue';
 
   /** Partials and parts */
   import ProfileAuthorModal from '@/views/ExploreItems/ProfileAuthorModal.vue';
