@@ -5,36 +5,48 @@
       @click="toggleCollapsed()"
     >
       <span>
-        Categorías <small v-if="idsCategoriesSelected.length > 0">({{ idsCategoriesSelected.length }})</small>
+        Categorías
+          <small v-if="idsCategoriesSelected.length > 0 && !isError && categories?.length > 0">
+            ({{ idsCategoriesSelected.length }})
+          </small>
       </span>  
       <span class="ml-2 icon is-size-7" aria-hidden="true">
         <font-awesome-icon :icon="collapsed ? faChevronDown : faChevronUp" />
       </span>
     </h2>
     <div class="mt-3" v-if="!collapsed">
-      <p v-if="isError">Error al cargar las categorías.</p>
-      <button
-        v-if="idsCategoriesSelected.length > 0"
-        class="has-text-link is-fullwidth"
-        role="button"
-        @click="clearIdsCategoriesSelected()"
-      >
-          <font-awesome-icon :icon="faTrash" />
-        Limpiar selección
-      </button>
-      <ul v-if="categories?.length > 0">
-        <li v-for="category in categories" :key="category.id">
-          <label class="checkbox">
-          <input
-            type="checkbox"
-            :value="category.id"
-            :checked="category.isSelected"
-            @input="toggleCategorySelected(category.id)"
-          />
-            {{ category.name }}
-          </label>
-        </li>
-      </ul>
+      <Message v-if="isError || isLoading" :type="isError ? 'danger' : 'info'">
+        {{ (isError)? 'Error al cargar las categorías.' : 'Cargando categorías...' }}
+      </Message>
+      <template v-else-if="categories?.length === 0">
+        <Message type="info">
+          No hay categorías disponibles.
+        </Message>
+      </template>
+      <template v-else>
+        <button
+          v-if="idsCategoriesSelected.length > 0"
+          class="has-text-link is-fullwidth"
+          role="button"
+          @click="clearIdsCategoriesSelected()"
+        >
+            <font-awesome-icon :icon="faTrash" />
+          Limpiar selección
+        </button>
+        <ul v-if="categories?.length > 0">
+          <li v-for="category in categories" :key="category.id">
+            <label class="checkbox">
+            <input
+              type="checkbox"
+              :value="category.id"
+              :checked="category.isSelected"
+              @input="toggleCategorySelected(category.id)"
+            />
+              {{ category.name }}
+            </label>
+          </li>
+        </ul>
+      </template>
     </div>
   </section>
 </template>
@@ -42,6 +54,7 @@
   import { ref, watch, defineEmits, onMounted, onBeforeMount } from 'vue';
   import { useCategoriesSelector } from '@/composables/useCategoriesSelector';
   import { faTrash, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons'
+  import Message from '@/shared/presentation/Message.vue';
   const emits = defineEmits(['update:modelValue']);
 
   const props = defineProps({
