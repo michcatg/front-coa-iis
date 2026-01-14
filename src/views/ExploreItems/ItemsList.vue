@@ -1,7 +1,12 @@
 <template>
   <div>
-    <div v-if="isLoading">Cargando...</div>
-    <div v-else-if="isError">Error al cargar los items.</div>
+    <message v-if="items.length === 0 || isLoading || isError"
+      :type="isError ? 'danger' : 'info'"
+    >
+      <template v-if="isError">Ha ocurrido un error al cargar los items. Por favor, inténtalo de nuevo más tarde.</template>
+      <template v-else-if="isLoading">Cargando items...</template>
+      <template v-else>No se han encontrado items para mostrar.</template>
+    </message>
     <ul v-else :class="['catalogo-items', { 'columns is-multiline': isCardView }]">
       <li
         v-for="(item, idx) in items"
@@ -100,7 +105,7 @@
 
   /** Partials and parts */
   import AutorPossibleSemblanza from '@/components/partials/autorPosibleSemblanza.vue'
-
+  import Message from '@/shared/presentation/Message.vue';
   const props = defineProps({
     items: {
       type: Array,
