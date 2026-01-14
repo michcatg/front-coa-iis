@@ -4,9 +4,10 @@
     <p class="content">{{ author?.institute }}</p>
     <figure class="has-text-centered block">
       <img
+        v-if="author?.image?.url"
         :src="author?.image?.url"
-        :alt="author?.image?.alternativeText || `Foto de ${author?.name}`"
-        :aria-label="author?.image?.ariaLabel || `Imagen del autor ${author?.name}`"
+        :alt="author?.image?.alternativeText || (author?.name) ? `Imagen de la persona autora: ${author?.name}` : ''"
+        :aria-label="author?.image?.ariaLabel || `Imagen de la persona autora: ${author?.name}`"
       />
       <figcaption>
         <p class=" content">{{ author?.image?.caption || (author)? `Autor: ${new AuthorEntity(author).getNombreCompleto()}` : '' }}</p>
