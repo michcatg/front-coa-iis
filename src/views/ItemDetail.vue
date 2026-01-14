@@ -87,8 +87,8 @@
     <profile-author-modal
       v-if="displayProfileAuthor"
       :author="selectedAuthor?.useAuthorProfile?.semblanzaAuthor"
-      :is-loading="isLoading"
-      :is-error="isError"
+      :is-loading="isLoadingSemblanza"
+      :is-error="isErrorSemblanza"
       @close="displayProfileAuthor = false"
     />
   </div>
@@ -123,7 +123,7 @@
   /* FIN Recuperación de autores relacionados con el ítem */
 
   /* INICIO Manejo de modal de perfil de autor */
-  const { displayProfileAuthor, selectedAuthor, processSemblanzaAuthor } = useAuthorProfileTriggerDisplay();
+  const { displayProfileAuthor, selectedAuthor, processSemblanzaAuthor, isError: isErrorSemblanza, isLoading: isLoadingSemblanza } = useAuthorProfileTriggerDisplay();
   /* FIN Manejo de modal de perfil de autor */
 
   const { itemDetail, resourceTemplate, isLoading, isError, fetch } = useItemsDetail({
