@@ -11,6 +11,7 @@
             type="text"
             placeholder="Texto de entrada"
             v-model="fullText"
+            :disabled="isDisabled"
           />
         </div>
       </div>  
@@ -29,25 +30,28 @@
               keyText="text"
               placeholder="Conector lógico"
               v-model="query.logicConnector"
-            />
-          </div>
-          <div class="column"  v-if="properties?.length > 0">
-            <select-searchable
-              labelFor="value-search"
-              :options="properties"
-              keyValue="id"
-              keyText="name"
-              placeholder="Selecciona una propiedad"
-              v-model="query.term"
+              :disabled="isDisabled"
             />
           </div>
           <div class="column">
             <select-searchable
-              :options="searchOperators"
+              labelFor="value-search"
+              :options="properties || []"
+              keyValue="id"
+              keyText="name"
+              placeholder="Selecciona una propiedad"
+              v-model="query.term"
+              :disabled="isDisabled"
+            />
+          </div>
+          <div class="column">
+            <select-searchable
+              :options="searchOperators || []"
               keyText="text"
               keyValue="value"
               placeholder="Seleccione un operador"
               v-model="query.operand"
+              :disabled="isDisabled"
             />
           </div>
           <div
@@ -60,6 +64,7 @@
               type="text"
               placeholder="Valor de la propiedad"
               v-model="query.value"
+              :disabled="isDisabled"
             />
           </div>
             <div class="column is-narrow">
@@ -90,7 +95,7 @@
       </div>
       <div class="field is-grouped is-grouped-right mt-4">
         <div class="control">
-          <button class="button is-primary" type="submit" aria-label="Buscar">
+          <button class="button is-primary" type="submit" aria-label="Buscar" :disabled="isDisabled">
             <span class="icon" aria-hidden="true">
                 <font-awesome-icon :icon="faMagnifyingGlass" />
             </span>
@@ -110,7 +115,7 @@
   </section>
 </template>
 <script setup>
-  import { ref, onMounted, defineEmits, watch } from 'vue'
+  import { ref, computed, onMounted, defineEmits, watch } from 'vue'
   //import { useResourceTemplatesCategories } from '@/composables/useResourceTemplatesCategories.js'
   import { useProperties } from '@/composables/useProperties.js'
   import { useOmekasSearchQuery as useSearchQuery } from '@/composables/useOmekasSearchQuery.js'
@@ -229,7 +234,9 @@
     addEmptySearchQuery()
     emit('search', getFullQuery())
   }
-
+  const isDisabled = computed(() => {
+    return isLoadingProperties.value || isErrorProperties.value
+  })
 </script>
 <style scoped lang="scss">
   @forward 'vue-ui-kit/dist/vue-ui-kit.css';
