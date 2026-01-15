@@ -1,5 +1,5 @@
 # Portal biblioteca IIS UNAM | Concurso de oposición abierto
-El siguietne documento describe las instrucciones de despliegue del proyecto en un entorno de microservicios utilizando docker y docker compose.
+El siguietne documento describe las instrucciones de despliegue del servicio del portal en un entorno de microservicios utilizando docker y docker compose.
 
 Esta documentación corresponde al repositorio front-coa-iis ubicado en https://github.com/michcatg/front-coa-iis
 
