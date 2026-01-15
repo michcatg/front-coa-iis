@@ -1,67 +1,29 @@
-# front-coa-iis
-Portal web (frontend) desarrollado con Vue.js 3, que consume y despliega datos consumidos desde un repositorio Omeka-S y un CMS headless, que proveerán información sobre recursos digitales y contenidos asociados a éstos respectivamente.
+# Portal biblioteca IIS UNAM | Concurso de oposición abierto
+El siguietne documento describe las instrucciones de despliegue del proyecto en un entorno de microservicios utilizando docker y docker compose.
 
-This template should help get you started developing with Vue 3 in Vite.
+Esta documentación corresponde al repositorio front-coa-iis ubicado en https://github.com/michcatg/front-coa-iis
 
-## Recommended IDE Setup
+## Pre-requisitos
+* Contar con un servicio de strapi corriendo y accesible en la misma red virtual, además de su configuración asociada
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+* Contar con un servicio de omekas corriendo y accesible en la misma red virtual, además de su configuración asociada
 
-## Recommended Browser Setup
+* Contar con el proxy inverso tarefik debidamente configurado y corriendo
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+* Contar con un dominio (real o de pruebas), con el que se registrará el servicio en el proxy inverso y desde el que será accesible en la red de consulta
 
-## Customize configuration
+## Despliegue
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+*  Crear un directorio para el proyecto
 
-## Project Setup
+  `mkdir portalIIS`
 
-```sh
-npm install
-```
+* Correr el script `deploy/deployInstructions.sh` en la raiz del directorio del proyecto
 
-### Compile and Hot-Reload for Development
+* Personalizar la configuración de todos los archivos creados de acuerdo con el ambiente disponible
+  * `deploy/envServices/.env.portal.prod` que contiene datos de entorno propios del servicio del protal
+  * `.env`que contiene datos de entorno de despliegue del contenedor
 
-```sh
-npm run dev
-```
+* Correr el servicio
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+  `docker compose up -d`
