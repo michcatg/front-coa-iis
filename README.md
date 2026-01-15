@@ -26,4 +26,4 @@ Esta documentación corresponde al repositorio front-coa-iis ubicado en https://
 
 * Correr el servicio
 
-  `docker compose up -d`
+  `docker compose -f compose.yml -f compose_prod.yml up -d`
