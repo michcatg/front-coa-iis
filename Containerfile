@@ -13,8 +13,14 @@ RUN npm run build
 FROM nginx:1.27.1-alpine AS final
 WORKDIR /app
 COPY --from=builder /app/dist /app
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d/nginx.conf /etc/nginx/conf.d/default.conf
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup \
+    && mkdir -p /var/cache/nginx \
+    && chown -R appuser:appgroup /var/cache/nginx \
+    && chown -R appuser:appgroup /app
+USER appuser
 EXPOSE 80
 CMD ["/entrypoint.sh"]
