@@ -1,29 +1,46 @@
-# Portal biblioteca IIS UNAM | Concurso de oposición abierto
-El siguietne documento describe las instrucciones de despliegue del servicio del portal en un entorno de microservicios utilizando docker y docker compose.
+# Infraestructura de despliegue Omeka-S
 
-Esta documentación corresponde al repositorio front-coa-iis ubicado en https://github.com/michcatg/front-coa-iis
+## Descripción
 
-## Pre-requisitos
-* Contar con un servicio de strapi corriendo y accesible en la misma red virtual, además de su configuración asociada
+El presente repositorio contiene los archivos necesarios para la configuración de infraestructura y el despliegue de un portal web. Este portal está diseñado para centralizar la consulta y explotación de contenidos digitales provenientes de Omeka S y Strapi. 
 
-* Contar con un servicio de omekas corriendo y accesible en la misma red virtual, además de su configuración asociada
+El desarrollo forma parte del sistema implementado para el Concurso de Oposición Abierto, destinado a cubrir una plaza de Técnico Académico Ordinario, Asociado "C", de Tiempo Completo, Interino, en el área de Programación del Departamento de Cómputo del Instituto de Investigaciones Sociales, con número de registro 02002-28.
 
-* Contar con el proxy inverso tarefik debidamente configurado y corriendo
 
-* Contar con un dominio (real o de pruebas), con el que se registrará el servicio en el proxy inverso y desde el que será accesible en la red de consulta
+Los otros componentes que forman parte del proyecto son:
 
-## Despliegue
+Componente  | Enlace al repositorio
+------------|--------------------------
+Omeka S | https://github.com/michcatg/omekas-infrastructure/
+CMS Headless (Strapi)   | https://github.com/michcatg/strapi-coa
 
-*  Crear un directorio para el proyecto
+El objetivo de este repositorio es permitir el despliegue del portal web  mediante
+contenedores Docker, utilizando imágenes propias, conforme a las bases del concurso. Asímismo,el repositorio incluye Los archivos necesarios para la creación de la imagen.
+
+## Imagen del despliegue
+El despliegue del portal web se realiza construyendo un contenedor a partir de la siguiente imagen:
+- **Servidor web (Nginx)**
+  Imagen: https://hub.docker.com/r/mitchcatg/portal-coa-iis
+  Archivo de construcción: [Containerfile](Containerfile)
+
+## Requisitos
+- Servicio de Strapi del proyecto, en ejecución, accesible dentro de la misma red virtual y correctamente configurado.
+- Disponer de un servicio de Omeka S en ejecución, accesible dentro de la misma red virtual y correctamente configurado.
+- Contar con el proxy inverso Traefik debidamente configurado y en funcionamiento.
+- Tener un dominio (real o de pruebas) para registrar el servicio en el proxy inverso y permitir el acceso desde la red de consulta.
+
+## Instalación y despliegue
+
+- Crear un directorio para el proyecto
 
   `mkdir portalIIS`
 
-* Correr el script `deploy/deployInstructions.sh` en la raiz del directorio del proyecto
+- Ejecutar el script `deploy/deployInstructions.sh` en la raiz del directorio del proyecto
 
-* Personalizar la configuración de todos los archivos creados de acuerdo con el ambiente disponible
-  * `deploy/envServices/.env.portal.prod` que contiene datos de entorno propios del servicio del protal
-  * `.env`que contiene datos de entorno de despliegue del contenedor
+- Personalizar la configuración de todos los archivos generados según el entorno disponible:
+  - `deploy/envServices/.env.portal.prod`: contiene las variables de entorno específicas del servicio del portal.
+  - `.env`: contiene las variables de entorno para el despliegue del contenedor.
 
-* Correr el servicio
+- Iniciar el servicio
 
   `docker compose -f compose.yml -f compose_prod.yml up -d`
