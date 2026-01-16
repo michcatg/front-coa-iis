@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # Final stage
-FROM nginx:alpine AS final
+FROM nginx:1.27.1-alpine AS final
 WORKDIR /app
 COPY --from=builder /app/dist /app
 COPY nginx/conf.d/nginx.conf /etc/nginx/conf.d/default.conf
