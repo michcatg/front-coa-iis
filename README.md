@@ -24,16 +24,21 @@ El despliegue del portal web se realiza construyendo un contenedor a partir de l
   Archivo de construcción: [Containerfile](Containerfile)
 
 ## Requisitos
+Para el despliegue del portal es necesario contar con:
+
+- Docker
+- Docker compose
 - Servicio de Strapi del proyecto, en ejecución, accesible dentro de la misma red virtual y correctamente configurado.
-- Disponer de un servicio de Omeka S en ejecución, accesible dentro de la misma red virtual y correctamente configurado.
-- Contar con el proxy inverso Traefik debidamente configurado y en funcionamiento.
-- Tener un dominio (real o de pruebas) para registrar el servicio en el proxy inverso y permitir el acceso desde la red de consulta.
+- Servicio de Omeka S en ejecución, accesible dentro de la misma red virtual y correctamente configurado.
+- Proxy inverso Traefik debidamente configurado y en funcionamiento.
+- Dominio (real o de pruebas) para registrar el servicio en el proxy inverso y permitir el acceso desde la red de consulta.
 
 ## Instalación y despliegue
 
 - Crear un directorio para el proyecto
-
-  `mkdir portalIIS`
+  ```sh
+  mkdir portalIIS
+  ```
 
 - Ejecutar el script `deploy/deployInstructions.sh` en la raiz del directorio del proyecto
 
@@ -42,5 +47,6 @@ El despliegue del portal web se realiza construyendo un contenedor a partir de l
   - `.env`: contiene las variables de entorno para el despliegue del contenedor.
 
 - Iniciar el servicio
-
-  `docker compose -f compose.yml -f compose_prod.yml up -d`
+  ```sh
+  docker compose -f compose.yml -f compose_prod.yml up -d`
+  ```
