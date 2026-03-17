@@ -17,6 +17,9 @@ CMS Headless (Strapi)   | https://github.com/michcatg/strapi-coa
 El objetivo de este repositorio es permitir el despliegue del portal web  mediante
 contenedores Docker, utilizando imágenes propias, conforme a las bases del concurso. Asímismo,el repositorio incluye Los archivos necesarios para la creación de la imagen.
 
+## Acceso a demo
+http://132.248.234.110:5000
+
 ## Imagen del despliegue
 El despliegue del portal web se realiza construyendo un contenedor a partir de la siguiente imagen:
 - **Servidor web (Nginx)**
